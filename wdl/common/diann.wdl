@@ -52,7 +52,7 @@ task build_blib_library {
 }
 
 
-task diann {
+task diann_search {
     input {
       File fasta_file
       Array[File] mzml_files
