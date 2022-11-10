@@ -1,6 +1,0 @@
-[submodule "wdl/docker/PDC_client"]
-	path = wdl/docker/PDC_client
-	url = https://github.com/ajmaurais/PDC_client
-[submodule "wdl/docker/generateMsconvertConfig"]
-	path = wdl/docker/generateMsconvertConfig
-	url = https://github.com/ajmaurais/generateMsconvertConfig
