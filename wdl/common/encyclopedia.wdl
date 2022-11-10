@@ -1,5 +1,5 @@
 
-task encyclopedia {
+task search_file {
     input {
       File input_file
       File fasta
@@ -120,7 +120,7 @@ task encyclopedia {
 }
 
 
-task encyclopedia_export_library {
+task export_library {
     input {
       Array[File] mzml_files
       Array[File] dia_files
