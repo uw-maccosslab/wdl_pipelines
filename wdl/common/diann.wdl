@@ -20,7 +20,7 @@ task get_file_mz_ranges {
 }
 
 
-task blib_build_library {
+task build_blib_library {
     input {
         File speclib
         File precursor_tsv
