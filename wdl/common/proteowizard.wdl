@@ -198,3 +198,45 @@ task skyline_import_search {
     }
 }
 
+
+task skyline_annotate_document {
+    input {
+      File skyline_input_zip
+      File annotation_csv
+      String? skyline_share_zip_type = "minimal"
+      String? skyline_output_name
+    }
+
+    String? local_skyline_output_name = if defined(skyline_output_name)
+        then skyline_output_name
+        else basename(skyline_input_zip, ".sky.zip") + "_annotated"
+    String skyline_input_basename=basename(skyline_input_zip, ".sky.zip")
+
+  command {
+    # unzip skyline input file
+    cp -v "${skyline_input_zip}" "${skyline_input_basename}.sky.zip"
+    unzip "${skyline_input_basename}.sky.zip"
+
+    # run skyline
+    wine SkylineCmd --in="${skyline_input_basename}.sky" \
+    --log-file=log.txt \
+    --out="${local_skyline_output_name}.sky" \
+    --import-annotations="${annotation_csv}" --save \
+    --share-zip="${local_skyline_output_name}.sky.zip" --share-type="${skyline_share_zip_type}"
+  }
+
+  runtime {
+    docker: "proteowizard/pwiz-skyline-i-agree-to-the-vendor-licenses:latest"
+  }
+
+  output {
+    File log_file = "log.txt"
+    File skyline_output = "${local_skyline_output_name}.sky.zip"
+  }
+
+  meta {
+    author: "Aaron Maurais"
+    email: "mauraisa@uw.edu"
+    description: "Add annotations csv into skyline file."
+  }
+}
