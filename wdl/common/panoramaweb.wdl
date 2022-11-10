@@ -1,7 +1,7 @@
 version 1.0
 
 
-task list_panorama_files {
+task list_files {
     input {
         String folder_webdav_url
         String api_key
@@ -62,7 +62,7 @@ task list_panorama_files {
 }
 
 
-task download_panorama_file {
+task download_file {
     input {
       String file_url
       String api_key
@@ -86,7 +86,7 @@ task download_panorama_file {
 }
 
 
-task upload_panorama_file {
+task upload_file {
     input {
       String panorama_folder
       String api_key
@@ -122,7 +122,7 @@ task upload_panorama_file {
 }
 
 
-task panorama_import_skyline {
+task import_skyline {
     input {
       String panorama_folder
       String api_key

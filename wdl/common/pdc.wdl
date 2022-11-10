@@ -70,7 +70,7 @@ task download_study_metadata {
 }
 
 
-task lookup_PDC_study_id {
+task lookup_study_id {
     input {
       String study_id
       String? api_url
@@ -92,7 +92,7 @@ task lookup_PDC_study_id {
 }
 
 
-task download_pdc_file {
+task download_file {
     input {
       String file_url
       String md5_sum
