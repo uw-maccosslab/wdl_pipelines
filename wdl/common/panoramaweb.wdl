@@ -88,7 +88,7 @@ task download_file {
 
 task upload_file {
     input {
-      String panorama_folder
+      String dest
       String api_key
       File file_to_be_uploaded
       Int retries = 3
@@ -100,7 +100,7 @@ task upload_file {
       for ((i=0; i < RETRIES ; i++)) ; do
         java -jar /code/PanoramaClient.jar \
           -u \
-          -w "${panorama_folder}" \
+          -w "${dest}" \
           -f "${file_to_be_uploaded}" \
           -k "${api_key}"
         rc=$?
@@ -118,6 +118,11 @@ task upload_file {
 
     output {
         File task_log = stdout()
+    }
+
+    parameter_meta {
+        dest: "WebDav url of destination directory on Panorama."
+        api_key: "Panorama Server API key"
     }
 }
 

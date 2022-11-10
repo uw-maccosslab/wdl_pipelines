@@ -29,7 +29,7 @@ task arrays_overlap {
     meta {
         author: "Aaron Maurais"
         email: "mauraisa@uw.edu"
-        description: "Reutrn true if any elements in rhs and lhs are the same."
+        description: "Check if any of the elements in arrays are the same."
     }
 }
 
