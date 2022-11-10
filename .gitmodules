@@ -1,0 +1,6 @@
+[submodule "docker/generateMsconvertConfig"]
+	path = docker/generateMsconvertConfig
+	url = https://github.com/ajmaurais/generateMsconvertConfig
+[submodule "docker/PDC_client"]
+	path = docker/PDC_client
+	url = https://github.com/ajmaurais/PDC_client
