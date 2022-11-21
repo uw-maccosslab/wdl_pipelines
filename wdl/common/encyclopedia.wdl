@@ -99,7 +99,7 @@ task search_file {
     }
 
     runtime {
-        docker: "mauraisa/encyclopedia:${encyclopedia_version}"
+        docker: "proteowizard/panorama-encyclopedia:${encyclopedia_version}"
     }
 
     output {
@@ -229,7 +229,7 @@ o       -libexport \
     }
 
     runtime {
-        docker: "mauraisa/encyclopedia:${encyclopedia_version}"
+        docker: "proteowizard/panorama-encyclopedia:${encyclopedia_version}"
     }
 
     output {
