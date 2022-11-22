@@ -1,0 +1,4 @@
+test/logs/*
+test/cromwell/cromwell-executions/*
+test/wdl/common/*
+test/wdl/*.zip
