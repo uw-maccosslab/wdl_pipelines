@@ -1,5 +1,31 @@
 version 1.0
 
+workflow skyline_import_search {
+    input {
+        File skyline_template_zip
+        File background_proteome_fasta
+        File library
+        Array[File] mzml_files
+        String? skyline_output_name
+        String? skyline_share_zip_type = "minimal"
+    }
+
+    call skyline_add_library {
+        input: skyline_template_zip = skyline_template_zip,
+               background_proteome_fasta = background_proteome_fasta,
+               library = library,
+               skyline_output_name = skyline_output_name,
+               skyline_share_zip_type = skyline_share_zip_type,
+    }
+
+    call skyline_import_results {
+        input: skyline_zip = skyline_add_library.skyline_output,
+               mzml_files = mzml_files,
+               skyline_output_name = skyline_output_name,
+               skyline_share_zip_type = skyline_share_zip_type
+    }
+}
+
 
 task generate_msconvert_config {
     input {
@@ -82,33 +108,75 @@ task msconvert {
 }
 
 
-task skyline_import_search {
+task skyline_add_library {
     input {
         File skyline_template_zip
         File background_proteome_fasta
-        File chr_lib
-        Array[File] mzml_files
-        String? skyline_share_zip_type = "minimal"
+        File library
         String? skyline_output_name
+        String? skyline_share_zip_type = "minimal"
+    } 
+
+    String skyline_template_basename = basename(skyline_template_zip, ".sky.zip")
+    String? local_skyline_output_name = if defined(skyline_output_name)
+        then skyline_output_name
+        else basename(skyline_template_zip, ".sky.zip") + "_withTargets"
+
+    command <<<
+        # unzip skyline template file
+        # cp -v "~{skyline_template_zip}" "~{skyline_template_basename}.sky.zip"
+        unzip "~{skyline_template_zip}"
+
+        # link blib to execution directory
+        lib_basename=$(basename '~{library}')
+        ln -sv '~{library}' "$lib_basename"
+
+        # add library and fasta file to skyline template and save to new file
+        wine SkylineCmd --in="~{skyline_template_basename}.sky" --log-file=skyline_add_library.log \
+            --import-fasta="~{background_proteome_fasta}" --add-library-path="$lib_basename" \
+            --out="~{local_skyline_output_name}.sky" --save \
+            --share-zip="~{local_skyline_output_name}.sky.zip" --share-type="~{skyline_share_zip_type}"
+    >>>
+
+    runtime {
+        docker: "proteowizard/pwiz-skyline-i-agree-to-the-vendor-licenses:latest"
+    }
+
+    output {
+        File skyline_output = "${local_skyline_output_name}.sky.zip"
+    }
+
+    parameter_meta {
+        skyline_template_zip: "An empty skyline document with the desired transition and peptide settings."
+        library: "A library file in a format natively supported by Skyline (.blib or .elib)"
+    }
+
+    meta {
+        author: "Aaron Maurais"
+        email: "mauraisa@uw.edu"
+        description: "Add a library and fasta file to an empty skyline template"
+    }
+}
+
+
+task skyline_import_results {
+    input {
+        File skyline_zip
+        Array[File] mzml_files
+        String? skyline_output_name
+        String? skyline_share_zip_type = "minimal"
         Int files_to_import_at_once = 10
         Int import_retries = 3
     }
 
     String? local_skyline_output_name = if defined(skyline_output_name)
         then skyline_output_name
-        else basename(skyline_template_zip, ".sky.zip") + "_out"
-    String skyline_template_basename = basename(skyline_template_zip, ".sky.zip")
+        else basename(skyline_zip, ".sky.zip") + "_results"
 
     command <<<
         declare -i RETRIES=~{import_retries}
 
-        # unzip skyline template file
-        cp -v "~{skyline_template_zip}" "~{skyline_template_basename}.sky.zip"
-        unzip "~{skyline_template_basename}.sky.zip"
-
-        # link blib to execution directory
-        lib_basename=$(basename '~{chr_lib}')
-        ln -sv '~{chr_lib}' "$lib_basename"
+        unzip "~{skyline_zip}"
 
         # create array of import commands
         files=( ~{sep=' ' mzml_files} )
@@ -131,24 +199,22 @@ task skyline_import_search {
             fi
         done
 
-        # add library and fasta file to skyline template and save to new file
-        wine SkylineCmd --in="~{skyline_template_basename}.sky" --log-file=skyline_add_library.log \
-            --import-fasta="~{background_proteome_fasta}" --add-library-path="$lib_basename" \
-            --out="~{local_skyline_output_name}.sky" \
-            --save
-
         # run skyline import in groups of n files
         # Importing in groups is necissary because sometimes there are random errors when accessing
         # files on the network file system inside of wine. By importing in groups we can avoid having
-        # to start over at the begining if one of these intermittent errors occures.
+        # to start over at the begining if one of these intermittent errors occurs.
         files_imported=0
+        skyline_input="--in=\"$(basename '~{skyline_zip}' '.zip')\" --out=\"~{local_skyline_output_name}.sky\""
         for c in "${add_commands[@]}" ; do
 
             # write import command to temporary file
             # This is necissary because wine is stupid and dosen't expand shell varaibles.
-            echo "wine SkylineCmd --in=\"~{local_skyline_output_name}.sky\" \
+            echo "wine SkylineCmd $skyline_input \
                       --log-file=skyline_import_files.log \
                       $c --save" > import_command.sh
+
+            # update skyline_input variable to use the new file name
+            skyline_input="--in=\"~{local_skyline_output_name}.sky\""
 
             # print progress
             files_in_group=$(cat import_command.sh |grep -o '\.mzML\s'|wc -l)
@@ -194,7 +260,23 @@ task skyline_import_search {
     meta {
         author: "Aaron Maurais"
         email: "mauraisa@uw.edu"
-        description: "Import DIA search into Skyline."
+        description: "Add mzML files to a skyline document with an existing target list."
+    }
+}
+
+
+task skyline_turn_off_library_explicit_peak_bounds {
+    input {
+        File skyline_zip
+    }
+
+    String skyline_input_basename=basename(skyline_zip, ".sky.zip")
+
+    command {
+        # unzip skyline input file
+        cp -v "${skyline_zip}" "${skyline_input_basename}.sky.zip"
+        unzip "${skyline_input_basename}.sky.zip"
+
     }
 }
 
@@ -240,3 +322,4 @@ task skyline_annotate_document {
     description: "Add annotations csv into skyline file."
   }
 }
+
