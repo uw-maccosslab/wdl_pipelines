@@ -8,6 +8,7 @@ workflow skyline_import_search {
         Array[File] mzml_files
         String? skyline_output_name
         String? skyline_share_zip_type = "minimal"
+        Boolean use_explicit_peak_bounds = true
     }
 
     call skyline_add_library {
@@ -18,8 +19,15 @@ workflow skyline_import_search {
                skyline_share_zip_type = skyline_share_zip_type,
     }
 
+    if (!use_explicit_peak_bounds) {
+        call skyline_turn_off_library_explicit_peak_bounds {
+            input: skyline_zip = skyline_add_library.skyline_output
+        }
+    }
+
     call skyline_import_results {
-        input: skyline_zip = skyline_add_library.skyline_output,
+        input: skyline_zip = select_first([skyline_turn_off_library_explicit_peak_bounds.skyline_output,
+                                           skyline_add_library.skyline_output]),
                mzml_files = mzml_files,
                skyline_output_name = skyline_output_name,
                skyline_share_zip_type = skyline_share_zip_type
@@ -274,9 +282,29 @@ task skyline_turn_off_library_explicit_peak_bounds {
 
     command {
         # unzip skyline input file
-        cp -v "${skyline_zip}" "${skyline_input_basename}.sky.zip"
-        unzip "${skyline_input_basename}.sky.zip"
+        unzip "${skyline_zip}"|tee /dev/tty| grep 'inflating'| sed -E 's/\s?inflating:\s?//' > archive_files.txt
 
+        xmlstarlet ed --inplace
+            --insert '/srm_settings/settings_summary/peptide_settings/peptide_libraries/bibliospec_lite_library' \
+            --type attr -n 'use_explicit_peak_bounds' --value "false" \
+            "${skyline_input_basename}".sky
+
+        cat archive_files.txt| xargs zip ${skyline_input_basename}.sky.zip
+        cat archive_files.txt| xargs rm -v
+    }
+
+    runtime {
+        docker: "mauraisa/wdl_array_tools:0.4"
+    }
+
+    output {
+        File skyline_output = "${skyline_input_basename}.sky.zip"
+    }
+
+    meta {
+        description: "Set use_explicit_peak_bounds to false for all libraries used in Skyline document."
+        author: "Aaron Maurais"
+        email: "mauraisa@uw.edu"
     }
 }
 

@@ -1,8 +1,9 @@
 {
   "skyline_import_search.skyline_template_zip": "File",
   "skyline_import_search.background_proteome_fasta": "File",
-  "skyline_import_search.chromotogram_library": "File",
+  "skyline_import_search.library": "File",
   "skyline_import_search.mzml_files": ["File"],
+  "skyline_import_search.use_explicit_peak_bounds": true,
   "skyline_import_search.skyline_output_name": "String? (optional)",
   "skyline_import_search.skyline_share_zip_type": "minimal",
   "skyline_import_search.skyline_import_results.import_retries": 3,

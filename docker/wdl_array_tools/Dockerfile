@@ -2,7 +2,7 @@ from python:3.9-alpine
 
 MAINTAINER "Aaron Maurais -- MacCoss Lab"
 
-RUN apk add --no-cache bash
+RUN apk add --no-cache bash xmlstarlet
 
 ADD wdl_array_tools /usr/bin
 
