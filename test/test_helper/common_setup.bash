@@ -13,5 +13,27 @@ _common_setup () {
     # copy common wdl files into zip archive in test directory
     cp -vr "$WDL_DIRNAME"/common "$TEST_WDL_DIRNAME" > "$DIR"/logs/cp_common.log
     cd "$TEST_WDL_DIRNAME"
-    zip -r common common/*.wdl > "$DIR"/logs/zip_common.log
+    find common -type f| grep '\.wdl$'| zip -@ common.zip > "$DIR"/logs/zip_common.log
 }
+
+check_state () {
+    if [ $1 == 0 ]; then
+        return 0
+    else
+        kill $PPID
+        return $status
+    fi
+}
+
+get_workflow_root () {
+    script="
+import json
+with open(\"$1\", 'r') as inF:
+    d = json.load(inF)
+print(d['workflowRoot'])
+    "
+    python -c "$script"
+}
+
+
+
