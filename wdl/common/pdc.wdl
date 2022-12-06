@@ -2,28 +2,6 @@
 version 1.0
 
 
-task filter_metadata {
-    input {
-        File metadata_file
-        File annotation_file
-        Array[String] subset
-    }
-    command {
-        echo "${sep=' ' subset}" | xargs -n 1 echo > subset_filter.txt
-        grep -f subset_filter.txt '${metadata_file}' > subset.txt
-        head -n 1 '${annotation_file}' > subset_study_metadata_annotations.tsv
-        grep -f subset_filter.txt '${annotation_file}' >> subset_study_metadata_annotations.tsv
-    }
-    runtime {
-        docker: "mauraisa/wdl_array_tools:latest"
-    }
-    output {
-        File subset_metadata_file = "subset.txt"
-        File subset_annotation_file = "subset_study_metadata_annotations.tsv"
-    }
-}
-
-
 task download_study_metadata {
     input {
       String study_id
