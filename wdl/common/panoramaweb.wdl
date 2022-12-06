@@ -4,23 +4,24 @@ version 1.0
 task list_files {
     input {
         String folder_webdav_url
-        String api_key
+        String? api_key
         String? file_ext
         String file_regex = ""
         Boolean allow_empty = false
         Int? limit
     }
 
+    String api_key_arg = if defined(api_key) then "-k " + api_key else ""
     String file_ext_arg = if defined(file_ext) then "-e " + file_ext else ""
     Int n_files = select_first([limit, -1])
 
     command {
         java -jar /code/PanoramaClient.jar \
              -l \
+             ${api_key_arg} \
              ${file_ext_arg} \
              -w "${folder_webdav_url}" \
-             -o all_files.txt \
-             -k "${api_key}"
+             -o all_files.txt
 
         if [[ $n_files -ge 0 ]] ; then
             egrep '${file_regex}' all_files.txt | head -n ${n_files} > file_list.txt
