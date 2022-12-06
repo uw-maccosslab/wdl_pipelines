@@ -9,3 +9,7 @@ setup () {
     assert_success
 }
 
+@test "test_panorama_list_files workflow has valid syntax" {
+    run womtool validate "$TEST_WDL_DIRNAME"/test_panoramaweb_tasks.wdl
+    assert_success
+}
