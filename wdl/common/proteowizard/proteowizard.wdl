@@ -282,15 +282,15 @@ task skyline_turn_off_library_explicit_peak_bounds {
 
     command {
         # unzip skyline input file
-        unzip "${skyline_zip}"|tee /dev/tty| grep 'inflating'| sed -E 's/\s?inflating:\s?//' > archive_files.txt
+        unzip "${skyline_zip}"| grep 'inflating'| sed -E 's/\s?inflating:\s?//' > archive_files.txt
 
-        xmlstarlet ed --inplace
+        xmlstarlet ed --inplace \
             --insert '/srm_settings/settings_summary/peptide_settings/peptide_libraries/bibliospec_lite_library' \
             --type attr -n 'use_explicit_peak_bounds' --value "false" \
             "${skyline_input_basename}".sky
 
-        cat archive_files.txt| xargs zip ${skyline_input_basename}.sky.zip
-        cat archive_files.txt| xargs rm -v
+        cat archive_files.txt| xargs -t zip ${skyline_input_basename}.sky.zip
+        cat archive_files.txt| xargs -t rm -v
     }
 
     runtime {
