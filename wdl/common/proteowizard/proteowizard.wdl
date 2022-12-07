@@ -132,7 +132,6 @@ task skyline_add_library {
 
     command <<<
         # unzip skyline template file
-        # cp -v "~{skyline_template_zip}" "~{skyline_template_basename}.sky.zip"
         unzip "~{skyline_template_zip}"
 
         # link blib to execution directory
@@ -324,8 +323,7 @@ task skyline_annotate_document {
 
   command {
     # unzip skyline input file
-    cp -v "${skyline_input_zip}" "${skyline_input_basename}.sky.zip"
-    unzip "${skyline_input_basename}.sky.zip"
+    unzip "${skyline_input_zip}.sky.zip"
 
     # run skyline
     wine SkylineCmd --in="${skyline_input_basename}.sky" \
