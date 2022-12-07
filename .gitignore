@@ -2,3 +2,5 @@ test/logs/*
 test/cromwell/cromwell-executions/*
 test/wdl/common/*
 test/wdl/*.zip
+test/cromwell/cromwell-workflow-logs/*
+test/cromwell/metadata/*

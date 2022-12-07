@@ -74,6 +74,10 @@ def main():
             sign = '!='
         spaces = ' ' * (max_len - len(key))
         print(f'{spaces}{key}: {lhs_hash} {sign} {rhs_hash}')
+    
+    print(f'{matches} of {len(exact_matches)} files matched exactly.')
+    if matches != len(exact_matches):
+        sys.exit(1)
 
 if __name__ == '__main__':
     main()
