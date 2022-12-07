@@ -32,6 +32,10 @@ workflow skyline_import_search {
                skyline_output_name = skyline_output_name,
                skyline_share_zip_type = skyline_share_zip_type
     }
+    
+    output {
+        File skyline_output = skyline_import_results.skyline_output
+    }
 }
 
 
