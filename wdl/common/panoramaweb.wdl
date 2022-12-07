@@ -23,9 +23,11 @@ task list_files {
              -w "${folder_webdav_url}" \
              -o all_files.txt
 
-        if [[ $n_files -ge 0 ]] ; then
+        if [[ ${n_files} -ge 0 ]] ; then
+            echo 'Limiting number of files...'
             egrep '${file_regex}' all_files.txt | head -n ${n_files} > file_list.txt
         else
+            echo 'Not lmiting number of files...'
             egrep '${file_regex}' all_files.txt > file_list.txt
         fi
         sed 's#^#${folder_webdav_url}/#' file_list.txt > url_list.txt
