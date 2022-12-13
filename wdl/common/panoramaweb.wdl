@@ -11,7 +11,7 @@ task list_files {
         Int? limit
     }
 
-    String api_key_arg = if defined(api_key) then "-k " + api_key else ""
+    String api_key_arg = if defined(api_key) then "-k '" + api_key + "'" else ""
     String file_ext_arg = if defined(file_ext) then "-e " + file_ext else ""
     Int n_files = select_first([limit, -1])
 
