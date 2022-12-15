@@ -189,8 +189,13 @@ task skyline_import_results {
 
         unzip "~{skyline_zip}"
 
+        # Link mzML files to execution directory
+        # This is necissary because Windows does not allow file paths longer than 250 characters.
+        mkdir ./mzML
+        for f in ~{sep=' ' mzml_files}; do ln -v "$f" "./mzML/$(basename $f)"; done
+
         # create array of import commands
-        files=( ~{sep=' ' mzml_files} )
+        files=( $(ls ./mzML/*.mzML) )
         echo -e "\nImporting ${#files[@]} files in total."
         file_count=0
         not_done=true
