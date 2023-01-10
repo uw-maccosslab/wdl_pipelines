@@ -65,6 +65,8 @@ task diann_search {
       Float? max_precursor_mz
       Int? min_precursor_charge = 2
       Int? max_precursor_charge = 3
+      Int? min_peptide_length = 8
+      Int? max_peptide_length = 30
       Float? min_fragment_mz
       Float? max_fragment_mz
       Array[String]? variable_modifications = ["'UniMod:35,15.994915,M'"]
@@ -79,6 +81,8 @@ task diann_search {
     Boolean range_specified = defined(min_precursor_mz) || defined(max_precursor_mz) || defined(min_fragment_mz) || defined(max_fragment_mz)
     String min_pr_charge = if range_specified then "--min-pr-charge " + min_precursor_charge else ""
     String max_pr_charge = if range_specified then "--max-pr-charge " + max_precursor_charge else ""
+    String min_pep_len = if range_specified then "--min-pep-len " + min_peptide_length else ""
+    String max_pep_len = if range_specified then "--max-pep-len " + max_peptide_length else ""
     String min_pr_mz = if defined(min_precursor_mz) then "--min-pr-mz " + min_precursor_mz else ""
     String max_pr_mz = if defined(max_precursor_mz) then "--max-pr-mz " + max_precursor_mz else ""
     String min_fr_mz = if defined(min_fragment_mz) then "--min-fr-mz " + min_fragment_mz else ""
@@ -98,6 +102,7 @@ task diann_search {
         --var-mods ${max_var_mods} \
         --reanalyse --smart-profiling \
         ${min_pr_charge} ${max_pr_charge} \
+        ${min_pep_len} ${max_pep_len} \
         ${min_pr_mz} ${max_pr_mz} ${min_fr_mz} ${max_fr_mz} \
         ${other_args} && \
         mv -v lib.tsv.speclib report.tsv.speclib
