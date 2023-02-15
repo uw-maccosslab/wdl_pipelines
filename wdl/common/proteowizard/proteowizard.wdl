@@ -7,7 +7,7 @@ workflow skyline_import_search {
         File library
         Array[File] mzml_files
         String? skyline_output_name
-        String? skyline_share_zip_type = "minimal"
+        String? skyline_share_zip_type = "complete"
         Boolean use_explicit_peak_bounds = true
     }
 
@@ -16,7 +16,7 @@ workflow skyline_import_search {
                background_proteome_fasta = background_proteome_fasta,
                library = library,
                skyline_output_name = skyline_output_name,
-               skyline_share_zip_type = skyline_share_zip_type,
+               skyline_share_zip_type = "complete",
     }
 
     if (!use_explicit_peak_bounds) {
@@ -126,7 +126,7 @@ task skyline_add_library {
         File background_proteome_fasta
         File library
         String? skyline_output_name
-        String? skyline_share_zip_type = "minimal"
+        String? skyline_share_zip_type = "complete"
     } 
 
     String skyline_template_basename = basename(skyline_template_zip, ".sky.zip")
@@ -175,7 +175,7 @@ task skyline_import_results {
         File skyline_zip
         Array[File] mzml_files
         String? skyline_output_name
-        String? skyline_share_zip_type = "minimal"
+        String? skyline_share_zip_type = "complete"
         Int files_to_import_at_once = 10
         Int import_retries = 3
     }
@@ -189,13 +189,8 @@ task skyline_import_results {
 
         unzip "~{skyline_zip}"
 
-        # Link mzML files to execution directory
-        # This is necissary because Windows does not allow file paths longer than 250 characters.
-        mkdir ./mzML
-        for f in ~{sep=' ' mzml_files}; do ln -v "$f" "./mzML/$(basename $f)"; done
-
         # create array of import commands
-        files=( $(ls ./mzML/*.mzML) )
+        files=( ~{sep=' ' mzml_files} )
         echo -e "\nImporting ${#files[@]} files in total."
         file_count=0
         not_done=true
@@ -321,7 +316,7 @@ task skyline_annotate_document {
     input {
       File skyline_input_zip
       File annotation_csv
-      String? skyline_share_zip_type = "minimal"
+      String? skyline_share_zip_type = "complete"
       String? skyline_output_name
     }
 
