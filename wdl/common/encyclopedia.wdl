@@ -6,10 +6,9 @@ task search_file {
       File input_file
       File fasta
       File library_elib
-      String encyclopedia_version
+      String encyclopedia_version = "2.12.30"
       String memory = "12g"
       Int numberOfThreadsUsed = 2
-      String? encyclopedia_percolator_version
       String? encyclopedia_percolator_trainingsetsize
       String? out_report_file
       String? acquisition
@@ -42,9 +41,6 @@ task search_file {
       Boolean? verifyModificationIons
     }
 
-    String percolatorVersionNumber = if defined(encyclopedia_percolator_version)
-        then "-percolatorVersionNumber " + encyclopedia_percolator_version
-        else ""
     String percolatorTrainingSetSize = if defined(encyclopedia_percolator_trainingsetsize)
         then "-percolatorTrainingSetSize " + encyclopedia_percolator_trainingsetsize
         else ""
@@ -64,6 +60,8 @@ task search_file {
         java ${"-Xmx" + memory} \
         -jar /code/encyclopedia-${encyclopedia_version}-executable.jar \
         -i ${local_input_name} \
+        -percolatorVersion /code/percolator/percolator-rel-3-01/src/percolator \
+        -enableAdvancedOptions -v2scoring \
         ${"-f " + fasta} \
         ${"-l " + library_elib} \
         ${"-o " +  out_report_file} \
@@ -88,7 +86,6 @@ task search_file {
         ${"-percolatorThreshold " + percolatorThreshold} \
         ${"-percolatorTrainingFDR " + percolatorTrainingFDR} \
         ${percolatorTrainingSetSize} \
-        ${percolatorVersionNumber} \
         ${"-poffset " + poffset} \
         ${"-precursorIsolationMargin " + precursorIsolationMargin} \
         ${"-precursorWindowSize " + precursorWindowSize} \
@@ -99,7 +96,7 @@ task search_file {
     }
 
     runtime {
-        docker: "proteowizard/panorama-encyclopedia:${encyclopedia_version}"
+        docker: "mauraisa/encyclopedia:${encyclopedia_version}"
     }
 
     output {
@@ -132,10 +129,9 @@ task export_library {
       Array[File]? mzml_elib_files
       File fasta
       File library_elib
-      String encyclopedia_version
+      String encyclopedia_version = "2.12.30"
       String memory = "48g"
       Int? numberOfThreadsUsed
-      String? encyclopedia_percolator_version
       String? encyclopedia_percolator_trainingsetsize
       String output_library_file
       String? align_between_files
@@ -156,13 +152,9 @@ task export_library {
       Float? percolatorThreshold
     }
 
-    String percolatorVersionNumber = if defined(encyclopedia_percolator_version)
-        then "-percolatorVersionNumber " + encyclopedia_percolator_version
-        else ""
     String percolatorTrainingSetSize = if defined(encyclopedia_percolator_trainingsetsize)
         then "-percolatorTrainingSetSize " + encyclopedia_percolator_trainingsetsize
         else ""
-
 
     command {
         set -e
@@ -202,7 +194,9 @@ task export_library {
         # Run encyclopedia
         java ${"-Xmx" + memory} \
         -jar /code/encyclopedia-${encyclopedia_version}-executable.jar \
-o       -libexport \
+        -libexport \
+        -percolatorVersion /code/percolator/percolator-rel-3-01/src/percolator \
+        -enableAdvancedOptions -v2scoring \
         -o ${output_library_file} \
         -i ./ \
         ${"-f " + fasta} \
@@ -224,12 +218,11 @@ o       -libexport \
         ${"-percolatorLocation " + percolatorLocation} \
         ${"-percolatorProteinThreshold " + percolatorProteinThreshold} \
         ${"-percolatorThreshold " + percolatorThreshold} \
-        ${percolatorVersionNumber} \
         ${percolatorTrainingSetSize}
     }
 
     runtime {
-        docker: "proteowizard/panorama-encyclopedia:${encyclopedia_version}"
+        docker: "mauraisa/encyclopedia:${encyclopedia_version}"
     }
 
     output {
