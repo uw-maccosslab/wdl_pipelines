@@ -9,6 +9,7 @@ workflow skyline_import_search {
         String? skyline_output_name
         String? skyline_share_zip_type = "complete"
         Boolean use_explicit_peak_bounds = true
+
     }
 
     call skyline_add_library {
@@ -314,7 +315,7 @@ task skyline_turn_off_library_explicit_peak_bounds {
 
 task skyline_annotate_document {
     input {
-      File skyline_input_zip
+      File skyline_zip
       File annotation_csv
       String? skyline_share_zip_type = "complete"
       String? skyline_output_name
@@ -322,12 +323,12 @@ task skyline_annotate_document {
 
     String? local_skyline_output_name = if defined(skyline_output_name)
         then skyline_output_name
-        else basename(skyline_input_zip, ".sky.zip") + "_annotated"
-    String skyline_input_basename=basename(skyline_input_zip, ".sky.zip")
+        else basename(skyline_zip, ".sky.zip") + "_annotated"
+    String skyline_input_basename=basename(skyline_zip, ".sky.zip")
 
   command {
     # unzip skyline input file
-    unzip "${skyline_input_zip}"
+    unzip "${skyline_zip}"| grep 'inflating'| sed -E 's/\s?inflating:\s?//' > archive_files.txt
 
     # run skyline
     wine SkylineCmd --in="${skyline_input_basename}.sky" \
@@ -335,6 +336,9 @@ task skyline_annotate_document {
     --out="${local_skyline_output_name}.sky" \
     --import-annotations="${annotation_csv}" --save \
     --share-zip="${local_skyline_output_name}.sky.zip" --share-type="${skyline_share_zip_type}"
+
+    # delete unziped input skyline files to save disk space
+    cat archive_files.txt| xargs -t rm -v
   }
 
   runtime {
@@ -351,5 +355,34 @@ task skyline_annotate_document {
     email: "mauraisa@uw.edu"
     description: "Add annotations csv into skyline file."
   }
+}
+
+task skyline_export_report {
+    input {
+        File skyline_zip
+        File report_template
+    }
+
+    String skyline_input_basename=basename(skyline_zip, ".sky.zip")
+    String report_name=basename(report_template, ".sky.zip")
+
+    command {
+        # unzip skyline input file
+        unzip "${skyline_zip}"| grep 'inflating'| sed -E 's/\s?inflating:\s?//' > archive_files.txt
+        
+        # run skyline
+        wine SkylineCmd --in="${skyline_input_basename}" \
+        --log-file=log.txt \
+        --report-add="${report_template}" \
+        --report-conflict-resolution="overwrite" --report-format="tsv" --report-invariant \
+        --report-name="${report_name}" --report-file="${report_name}.tsv"
+
+        # delete unziped skyline files to save disk space
+        cat archive_files.txt| xargs -t rm -v
+    }
+
+    output {
+        File report = "${report_name}.tsv"
+    }
 }
 
