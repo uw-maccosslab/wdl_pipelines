@@ -327,7 +327,7 @@ task skyline_annotate_document {
 
   command {
     # unzip skyline input file
-    unzip "${skyline_input_zip}.sky.zip"
+    unzip "${skyline_input_zip}"
 
     # run skyline
     wine SkylineCmd --in="${skyline_input_basename}.sky" \
