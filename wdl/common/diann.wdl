@@ -69,7 +69,8 @@ task diann_search {
       Int? max_peptide_length = 30
       Float? min_fragment_mz
       Float? max_fragment_mz
-      Array[String]? variable_modifications = ["'UniMod:35,15.994915,M'"]
+      # Array[String]? variable_modifications = ["'UniMod:35,15.994915,M'"]
+      Array[String]? variable_modifications
       String? monitor_mod
       Int? threads
     }
