@@ -6,13 +6,14 @@ _common_setup () {
 
     # set up directory variables
     DIR="$( cd "$( dirname "$BATS_TEST_FILENAME" )" >/dev/null 2>&1 && pwd )"
-    TEST_WDL_DIRNAME="$DIR/wdl/"
+    TEST_WDL_DIR="$DIR/wdl/"
     PROJECT_ROOT="$DIR/../"
-    WDL_DIRNAME="$PROJECT_ROOT/wdl/"
+    WDL_DIR="$PROJECT_ROOT/wdl/"
+    SCRIPTS_DIR="$DIR/scripts/"
 
     # copy common wdl files into zip archive in test directory
-    cp -vr "$WDL_DIRNAME"/common "$TEST_WDL_DIRNAME" > "$DIR"/logs/cp_common.log
-    cd "$TEST_WDL_DIRNAME"
+    cp -vr "$WDL_DIR"/common "$TEST_WDL_DIR" > "$DIR"/logs/cp_common.log
+    cd "$TEST_WDL_DIR"
     find common -type f| grep '\.wdl$'| zip -@ common.zip > "$DIR"/logs/zip_common.log
 }
 

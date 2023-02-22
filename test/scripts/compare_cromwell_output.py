@@ -44,8 +44,7 @@ def find_files(target_files, output_dir):
 
     if sucess:
         return comparisons
-    else:
-        return None
+    return None
 
 
 def main():
@@ -60,9 +59,9 @@ def main():
     exact_matches = find_files(args.addExactMatch, args.cromwellExecutionDir)
     if exact_matches is None:
         sys.exit(1)
-    
+
     max_len = min(max(len(x) for x in exact_matches), 50)
- 
+
     matches = 0
     for key, value in exact_matches.items():
         lhs_hash = md5_sum(value[0])
@@ -74,10 +73,11 @@ def main():
             sign = '!='
         spaces = ' ' * (max_len - len(key))
         print(f'{spaces}{key}: {lhs_hash} {sign} {rhs_hash}')
-    
+
     print(f'{matches} of {len(exact_matches)} files matched exactly.')
     if matches != len(exact_matches):
         sys.exit(1)
+
 
 if __name__ == '__main__':
     main()
