@@ -381,6 +381,10 @@ task skyline_export_report {
         cat archive_files.txt| xargs -t rm -v
     }
 
+    runtime {
+      docker: "proteowizard/pwiz-skyline-i-agree-to-the-vendor-licenses:latest"
+    }
+
     output {
         File report = "${report_name}.tsv"
     }
