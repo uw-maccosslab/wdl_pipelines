@@ -1,0 +1,5 @@
+mzML=true
+mz64=true
+inten64=true
+simAsSpectra=true
+filter="peakPicking vendor msLevel=1-2"
