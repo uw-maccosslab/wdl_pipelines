@@ -18,3 +18,8 @@ setup () {
     run womtool validate -i "$TEST_WDL_DIR"/test_msconvert_tasks/inputs.json "$TEST_WDL_DIR"/test_msconvert_tasks/test_msconvert_tasks.wdl
     assert_success
 }
+
+@test "test_skyline_tasks workflow has valid syntax" {
+    run womtool validate -i "$TEST_WDL_DIR"/test_skyline_tasks/inputs.json "$TEST_WDL_DIR"/test_skyline_tasks/test_skyline_tasks.wdl
+    assert_success
+}
