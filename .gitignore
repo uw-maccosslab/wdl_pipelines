@@ -1,5 +1,6 @@
 test/logs/*
 test/cromwell/cromwell-executions/*
+test/cromwell/inputs/*
 test/wdl/common/*
 test/wdl/*.zip
 test/cromwell/cromwell-workflow-logs/*

@@ -6,6 +6,8 @@ import json
 
 def main():
     parser = argparse.ArgumentParser(description='Replace relative file paths with absolute file paths in cromwell inputs file.')
+    parser.add_argument('-o', '--ofname', default=None,
+                        help='Optional output file name. If not specified, output is printed to stdout.')
     parser.add_argument('inputs_template', help='Inputs template with file datatypes marked.')
     parser.add_argument('inputs', help='Inputs file with relative file paths.')
     args = parser.parse_args()
@@ -37,7 +39,11 @@ def main():
     if any_missing:
         sys.exit(1)
 
-    sys.stdout.write(json.dumps(inputs, indent=4) + '\n')
+    if args.ofname is None:
+        sys.stdout.write(json.dumps(inputs, indent=4) + '\n')
+    else:
+        with open(args.ofname, 'w') as outF:
+            outF.write(json.dumps(inputs, indent=4) + '\n')
 
 
 if __name__ == '__main__':

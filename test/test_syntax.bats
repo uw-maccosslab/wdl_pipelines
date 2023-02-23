@@ -13,3 +13,8 @@ setup () {
     run womtool validate "$TEST_WDL_DIR"/test_panoramaweb_tasks.wdl
     assert_success
 }
+
+@test "test_proteowizard_tasks workflow has valid syntax" {
+    run womtool validate "$TEST_WDL_DIR"/test_proteowizard_tasks/test_proteowizard_tasks.wdl
+    assert_success
+}
