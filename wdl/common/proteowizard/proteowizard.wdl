@@ -364,14 +364,14 @@ task skyline_export_report {
     }
 
     String skyline_input_basename=basename(skyline_zip, ".sky.zip")
-    String report_name=basename(report_template, ".sky.zip")
+    String report_name=basename(report_template, ".skyr")
 
     command {
         # unzip skyline input file
         unzip "${skyline_zip}"| grep 'inflating'| sed -E 's/\s?inflating:\s?//' > archive_files.txt
         
         # run skyline
-        wine SkylineCmd --in="${skyline_input_basename}" \
+        wine SkylineCmd --in="${skyline_input_basename}.sky" \
         --log-file=log.txt \
         --report-add="${report_template}" \
         --report-conflict-resolution="overwrite" --report-format="tsv" --report-invariant \
