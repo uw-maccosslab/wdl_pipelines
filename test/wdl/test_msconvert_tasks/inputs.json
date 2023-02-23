@@ -1,0 +1,5 @@
+{
+  "test_msconvert_tasks.overlapping_window_test_mzml": "../../data/test_msconvert_tasks/inputs/msconvert/20221013_2B1_EV.mzML",
+  "test_msconvert_tasks.non_overlapping_test_mzml": "../../data/test_msconvert_tasks/inputs/msconvert/CPTAC_CCRCC_W_JHU_20200710_LUMOS_CPT007730_ITH_02.mzML"
+}
+
