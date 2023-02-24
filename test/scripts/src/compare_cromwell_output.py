@@ -4,6 +4,8 @@ import sys
 import os
 from hashlib import md5
 
+# from 
+
 def md5_sum(fname):
     ''' Get the md5 digest of a file. '''
     file_hash = md5()
@@ -45,6 +47,11 @@ def find_files(target_files, output_dir):
     if sucess:
         return comparisons
     return None
+
+
+def compare_tsvs(target_fname, test_fname):
+    target = read_tsv(target_fname)
+    test = read_tsv(test_fname)
 
 
 def main():
