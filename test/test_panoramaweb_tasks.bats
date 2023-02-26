@@ -2,6 +2,10 @@
 setup () {
     load 'test_helper/common_setup'
     _common_setup
+
+    # delete old log file
+    COMPARISON_LOG_NAME="$DIR/logs/${TEST_NAME}_file_comparison.log"
+    rm -rf "$COMPARISON_LOG_NAME"
 }
 
 # bats file_tags=panorama
@@ -18,35 +22,38 @@ setup () {
 @test "Check test_file_ext output" {
     workflow_root=$(get_workflow_root "$DIR"/cromwell/metadata/test_panoramaweb_tasks.json)
     target_dir="${PROJECT_ROOT}/test/data/test_panorama_list_files/test_file_ext"
-    run python3 "$SCRIPTS_DIR"/compare_cromwell_output.py -e "$target_dir"/rc \
+    run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
                                               -e "$target_dir"/file_list.txt \
                                               -e "$target_dir"/url_list.txt \
                                               -e "$target_dir"/all_files.txt \
                                               "$workflow_root/call-test_file_ext/execution"
-    assert_success
+    echo "$output" >> $COMPARISON_LOG_NAME
+    [ "$status" -eq 0 ]
 }
 
 # bats test_tags=check
 @test "Check test_list_files_with_limit output" {
     workflow_root=$(get_workflow_root "$DIR"/cromwell/metadata/test_panoramaweb_tasks.json)
     target_dir="${PROJECT_ROOT}/test/data/test_panorama_list_files/test_list_files_with_limit"
-    run python3 "$SCRIPTS_DIR"/compare_cromwell_output.py -e "$target_dir"/rc \
+    run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
                                               -e "$target_dir"/file_list.txt \
                                               -e "$target_dir"/url_list.txt \
                                               -e "$target_dir"/all_files.txt \
                                               "$workflow_root/call-test_list_files_with_limit/execution"
-    assert_success
+    echo "$output" >> $COMPARISON_LOG_NAME
+    [ "$status" -eq 0 ]
 }
 
 # bats test_tags=check
 @test "Check test_list_files_without_limit output" {
     workflow_root=$(get_workflow_root "$DIR"/cromwell/metadata/test_panoramaweb_tasks.json)
     target_dir="${PROJECT_ROOT}/test/data/test_panorama_list_files/test_list_files_without_limit"
-    run python3 "$SCRIPTS_DIR"/compare_cromwell_output.py -e "$target_dir"/rc \
+    run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
                                               -e "$target_dir"/file_list.txt \
                                               -e "$target_dir"/url_list.txt \
                                               -e "$target_dir"/all_files.txt \
                                               "$workflow_root/call-test_list_files_without_limit/execution"
-    assert_success
+    echo "$output" >> $COMPARISON_LOG_NAME
+    [ "$status" -eq 0 ]
 }
 

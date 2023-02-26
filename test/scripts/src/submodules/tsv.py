@@ -1,11 +1,9 @@
 
 import sys
 import os
-import re
 from csv import Sniffer
 import pandas as pd
 import numpy as np
-from math import isclose
 
 def detect_deliminator(fname):
     with open(fname, 'r') as inF:
