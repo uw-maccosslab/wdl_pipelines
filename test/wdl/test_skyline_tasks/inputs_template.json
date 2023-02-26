@@ -2,7 +2,9 @@
   "test_skyline_tasks.skyline_template": "File",
   "test_skyline_tasks.background_fasta": "File",
   "test_skyline_tasks.mzml_directory": "File",
-  "test_skyline_tasks.blib_library": "File",
-  "test_skyline_tasks.precursor_quality_report_tempalte": "File"
+  "test_skyline_tasks.library": "File",
+  "test_skyline_tasks.precursor_quality_report_template": "File",
+  "test_skyline_tasks.peptide_abundance_long_report_template": "File",
+  "test_skyline_tasks.protein_abundance_long_report_template": "File"
 }
 

@@ -6,32 +6,62 @@ workflow test_skyline_tasks {
     input {
         File skyline_template
         File mzml_directory
-        File blib_library
-        File precursor_quality_report_tempalte
+        File library
         File background_fasta
+        File? skyline_doc
+        File precursor_quality_report_template
+        File peptide_abundance_long_report_template
+        File protein_abundance_long_report_template
+        File? annotations_csv
     }
     
-    call list_files as list_wide_mzml_files {
-        input: path = mzml_directory
+    # add results to empty skyline document
+    if (!defined(skyline_doc)) {
+        call list_files as list_wide_mzml_files {
+            input: path = mzml_directory
+        }
+
+        # import results to skyline
+        call pwiz.skyline_add_library {
+            input: skyline_template_zip = skyline_template,
+                   background_proteome_fasta = background_fasta,
+                   library = library,
+                   skyline_share_zip_type = "complete",
+                   skyline_output_name = "out"
+        }
+        call pwiz.skyline_import_results {
+            input: skyline_zip = skyline_add_library.skyline_output,
+                   mzml_files = list_wide_mzml_files.files,
+                   skyline_share_zip_type = "complete"
+        }
+        if(defined(annotations_csv)) {
+            call pwiz.skyline_annotate_document {
+                input: skyline_zip = skyline_import_results.skyline_output,
+                       annotation_csv = select_first([annotations_csv,])
+                       
+            }
+        }
+
     }
 
-    # import results to skyline
-    call pwiz.skyline_add_library {
-        input: skyline_template_zip = skyline_template,
-               background_proteome_fasta = background_fasta,
-               library = blib_library,
-               skyline_share_zip_type = "complete"
-    }
-    call pwiz.skyline_import_results {
-        input: skyline_zip = skyline_add_library.skyline_output,
-               mzml_files = list_wide_mzml_files.files,
-               skyline_share_zip_type = "complete"
-    }
-
+    # export reports
+    File report_skyline_doc = select_first([skyline_doc,
+                                            skyline_annotate_document.skyline_output,
+                                            skyline_import_results.skyline_output])
     call pwiz.skyline_export_report as export_precursor_report {
-        input: skyline_zip = skyline_import_results.skyline_output,
-               report_template = precursor_quality_report_tempalte
+        input: skyline_zip = report_skyline_doc,
+               report_template = precursor_quality_report_template
     }
+    call pwiz.skyline_export_report as export_peptide_report {
+        input: skyline_zip = report_skyline_doc,
+               report_template = peptide_abundance_long_report_template
+    }
+    call pwiz.skyline_export_report as export_protein_report {
+        input: skyline_zip = report_skyline_doc,
+               report_template = protein_abundance_long_report_template
+    }
+
+    # export gct
 }
 
 task list_files {

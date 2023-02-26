@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<views>
+  <view name="peptide_abundance_long" rowsource="pwiz.Skyline.Model.Databinding.Entities.Peptide" sublist="Results!*" uimode="proteomic">
+    <column name="Protein" />
+    <column name="" />
+    <column name="ModifiedSequence" />
+    <column name="Results!*.Value.ResultFile.Replicate.Name" />
+    <column name="Results!*.Value.Quantification.NormalizedArea" />
+  </view>
+</views>
