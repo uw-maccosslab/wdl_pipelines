@@ -417,6 +417,7 @@ task generate_gct {
         docker: "mauraisa/wdl_array_tools:0.6"
     }
     output {
-        File gct_fie = basename(tsv_file, ".tsv") + ".gct"
+        File gct_file = basename(tsv_file, ".tsv") + ".gct"
     }
 }
+
