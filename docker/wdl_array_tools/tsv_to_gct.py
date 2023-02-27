@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
+import sys
+import os
 import argparse
 import csv
-import sys
 
 
 def detect_dialect(fname):
@@ -15,27 +16,28 @@ class Tsv():
     def __init__(self):
         self.data = dict()
         self.headers = dict()
-        self.locator_to_name = dict()
+        self.name_to_locator = dict()
+        self.annotations = dict()
 
 
     def read(self, fname: str, names_from: str, name_path_from: str, values_from: str):
         duplicates = dict()
-        locator_to_name = set()
+        name_to_locator = set()
         with open(fname, 'r') as inF:
             reader = csv.reader(inF, dialect=detect_dialect(fname))
 
             # process header row
-            self.headers = {cell: i for i, cell in enumerate(next(reader))}
+            headers = {cell: i for i, cell in enumerate(next(reader))}
+            self.headers = {cell: i for cell, i in headers.items() if cell not in (names_from, values_from, name_path_from)}
             for col in [names_from, values_from, name_path_from]:
-                if col not in self.headers:
+                if col not in headers:
                     raise RuntimeError(f'Missing required column "{col}" in {fname}')
-            data_cols = [i for k, i in self.headers.items() if k not in (names_from, values_from, name_path_from)]
-            names_from_i = self.headers[names_from]
-            values_from_i = self.headers[values_from]
-            names_path_from_i = self.headers[name_path_from]
+            names_from_i = headers[names_from]
+            values_from_i = headers[values_from]
+            names_path_from_i = headers[name_path_from]
 
             for row in reader:
-                keys = tuple(row[i] for i in data_cols)
+                keys = tuple(row[i] for i in self.headers.values())
                 if keys not in self.data:
                     self.data[keys] = dict()
 
@@ -46,7 +48,7 @@ class Tsv():
                     duplicates[keys].add((row[names_from_i], row[values_from_i]))
                     duplicates[keys].add((row[names_from_i], self.data[keys][row[names_from_i]]))
 
-                locator_to_name.add((row[names_from_i], row[names_path_from_i]))
+                name_to_locator.add((row[names_path_from_i], row[names_from_i]))
 
                 self.data[keys][row[names_from_i]] = row[values_from_i]
         
@@ -58,16 +60,67 @@ class Tsv():
                 sys.stderr.write(f'{duplicate}\n')
             all_good = False
         
-        # populate self.locator_to_name
-        for name, locator in locator_to_name:
-            if locator not in self.locator_to_name:
-                self.locator_to_name[locator] = name
+        # populate self.name_to_locator
+        for locator, name in name_to_locator:
+            if name not in self.name_to_locator:
+                self.name_to_locator[name] = locator
             else:
-                if self.locator_to_name[locator] != name:
-                    sys.stderr.write(f'Non unique name to locator mapping: {locator} -> {name}\n')
+                if self.name_to_locator[name] != locator:
+                    sys.stderr.write(f'Non unique name to locator mapping: {name} -> {locator}\n')
                     all_good = False
         
         return all_good
+
+
+    def read_annotations(self, fname, locator_col='ElementLocator'):
+        with open(fname, 'r') as inF:
+            reader = csv.reader(inF, dialect=detect_dialect(fname))
+            headers = {cell: i for i, cell in enumerate(next(reader))}
+            if locator_col not in headers:
+                raise RuntimeError(f'Missing required column "{locator_col}" in {fname}')
+            self.annotation_cols = {k: i for k, i in headers.items() if k != locator_col}
+            locator_col_i = headers[locator_col]
+
+            for row in reader:
+                if row[locator_col_i] not in self.annotations:
+                    self.annotations[row[locator_col_i]] = dict()
+                for annotation, index in self.annotation_cols.items():
+                    self.annotations[row[locator_col_i]][annotation] = row[index]
+
+
+    def _get_data_columns(self):
+        replicates = set()
+        for obs in self.data.values():
+            for replicate in obs:
+                replicates.add(replicate)
+        return list(replicates)
+
+
+    def write_gct(self, fname):
+        
+        data_cols = self._get_data_columns()
+        key_col_NAs = '\t'.join(['NA'] * len(self.headers))
+        
+        with open(fname, 'w') as outF:
+            outF.write('#1.3\n')
+            outF.write(f'{len(self.data)}\t{len(data_cols)}\t{len(self.headers)}\t{len(self.annotation_cols)}\n')
+
+            # print first column headers
+            outF.write('\t'.join(['id'] + list(self.headers.keys()) + data_cols) + '\n')
+
+            # print annotations
+            for annotation in self.annotation_cols:
+                outF.write(f'{annotation}\t{key_col_NAs}')
+                for name, locator in self.name_to_locator.items():
+                    outF.write('\t{}'.format(self.annotations[locator][annotation]))
+                outF.write('\n')
+
+            # print values
+            for element, values in self.data.items():
+                outF.write('\t'.join(element))
+                for col in data_cols:
+                    outF.write('\t{}'.format(values[col] if col in values else 'NA'))
+                outF.write('\n')
 
 
 def main():
@@ -84,7 +137,12 @@ def main():
 
     tsv = Tsv()
     tsv.read(args.tsv, args.namesFrom, args.namePathFrom, args.valuesFrom)
+    tsv.read_annotations(args.annotations)
+
+    ofname = os.path.splitext(os.path.basename(args.tsv))[0] + '.gct'
+    tsv.write_gct(ofname)
 
 
 if __name__ == '__main__':
     main()
+
