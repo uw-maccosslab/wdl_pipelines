@@ -38,7 +38,6 @@ setup () {
     assert_success
 }
 
-# bats file_tags=proteowizard
 # bats test_tags=check
 @test "Check test_generate_overlapping_config output" {
     workflow_root=$(get_workflow_root "$DIR"/cromwell/metadata/"$TEST_NAME".json)
@@ -50,7 +49,6 @@ setup () {
     [ "$status" -eq 0 ]
 }
 
-# bats file_tags=proteowizard
 # bats test_tags=check
 @test "Check test_generate_non_overlapping_config output" {
     workflow_root=$(get_workflow_root "$DIR"/cromwell/metadata/"$TEST_NAME".json)

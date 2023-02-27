@@ -101,6 +101,8 @@ def main():
     print(f'{aproximate_matches} of {len(tsv_matches)} tsv files matched approximately.')
     if matches != len(exact_matches):
         sys.exit(1)
+    if aproximate_matches != len(tsv_matches):
+        sys.exit(1)
 
 
 if __name__ == '__main__':

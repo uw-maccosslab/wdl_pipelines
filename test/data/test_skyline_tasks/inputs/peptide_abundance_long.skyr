@@ -5,6 +5,7 @@
     <column name="" />
     <column name="ModifiedSequence" />
     <column name="Results!*.Value.ResultFile.Replicate.Name" />
+    <column name="Results!*.Value.ResultFile.Replicate.Locator" />
     <column name="Results!*.Value.Quantification.NormalizedArea" />
   </view>
 </views>

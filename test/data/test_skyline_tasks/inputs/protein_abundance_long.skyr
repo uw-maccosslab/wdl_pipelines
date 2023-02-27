@@ -5,6 +5,7 @@
     <column name="Description" />
     <column name="Gene" />
     <column name="Results!*.Value.Replicate.Name" />
+    <column name="Results!*.Value.Replicate.Locator" />
     <column name="Results!*.Value.Abundance" />
   </view>
 </views>

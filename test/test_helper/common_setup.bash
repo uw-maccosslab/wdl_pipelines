@@ -29,9 +29,12 @@ check_state () {
 get_workflow_root () {
     script="
 import json
-with open(\"$1\", 'r') as inF:
-    d = json.load(inF)
-print(d['workflowRoot'])
+import os
+
+if os.path.isfile(\"$1\"):
+    with open(\"$1\", 'r') as inF:
+        d = json.load(inF)
+    print(d['workflowRoot'])
     "
     python -c "$script"
 }
