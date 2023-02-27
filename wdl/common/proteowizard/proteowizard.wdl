@@ -406,7 +406,7 @@ task generate_gct {
 
     command {
         # Link input files to execution directory
-        # This is necissary because cromwell picks terrible file names which include dashes
+        # This is necissary because cromwell picks terrible file names which begin with dashes
         for f in "${tsv_file}" "${annotations_file}" ; do
             ln "$f" .
         done

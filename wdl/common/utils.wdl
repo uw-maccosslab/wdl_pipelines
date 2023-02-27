@@ -23,7 +23,7 @@ task arrays_overlap {
     }
 
     runtime {
-        docker: "mauraisa/wdl_array_tools:0.3"
+        docker: "mauraisa/wdl_array_tools:latest"
     }
 
     meta {
@@ -56,7 +56,7 @@ task subset_file {
         ${command} -f subset_filter.txt '${file}' > subset.txt
     }
     runtime {
-        docker: "mauraisa/wdl_array_tools:0.3"
+        docker: "mauraisa/wdl_array_tools:latest"
     }
     output {
         File subset_file = "subset.txt"
@@ -65,7 +65,7 @@ task subset_file {
     meta {
         author: "Aaron Maurais"
         email: "mauraisa@uw.edu"
-        description: "Subset file by patterns that occures in subset."
+        description: "Subset file by patterns that occurs in subset."
     }
     parameter_meta {
         file: "A file containing lines of text"
@@ -73,6 +73,24 @@ task subset_file {
         header: "Is the first line of file a header?"
         fixed: "Should the lines in subset be interpreted as RegEx?"
         inversed: "Inversed match lines in subset?"
+    }
+}
+
+task dirname {
+    input {
+        String path
+    }
+    command {
+        python <<CODE
+            from os.path import dirname
+            print(dirname(${path}))
+        CODE
+    }
+    runtime {
+        docker: "mauraisa/wdl_array_tools:latest"
+    }
+    output {
+        String dirname = read_string(stdout())
     }
 }
 
