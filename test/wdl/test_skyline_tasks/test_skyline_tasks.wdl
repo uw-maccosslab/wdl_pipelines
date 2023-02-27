@@ -61,7 +61,17 @@ workflow test_skyline_tasks {
                report_template = protein_abundance_long_report_template
     }
 
-    # export gct
+    # export gct files
+    call pwiz.generate_gct as generate_peptide_gct {
+        input: tsv_file = export_peptide_report.report,
+               annotations_file = select_first([annotations_csv,]),
+               values_from = "NormalizedArea"
+    }
+    call pwiz.generate_gct as generate_protein_gct {
+        input: tsv_file = export_protein_report.report,
+               annotations_file = select_first([annotations_csv,]),
+               values_from = "ProteinAbundance"
+    }
 }
 
 task list_files {

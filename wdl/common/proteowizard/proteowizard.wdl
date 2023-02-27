@@ -390,3 +390,33 @@ task skyline_export_report {
     }
 }
 
+
+task generate_gct {
+    input {
+        File tsv_file
+        File annotations_file
+        String? values_from
+        String? names_from
+        String? name_path_from
+    }
+    
+    String values_from_arg = if defined(values_from) then "--valuesFrom '${values_from}'" else ""
+    String names_from_arg = if defined(names_from) then "--namesFrom '${names_from}'" else ""
+    String name_path_from_arg = if defined(name_path_from) then "--namePathFrom '${name_path_from}'" else ""
+
+    command {
+        # Link input files to execution directory
+        # This is necissary because cromwell picks terrible file names which include dashes
+        for f in "${tsv_file}" "${annotations_file}" ; do
+            ln "$f" .
+        done
+
+        tsv_to_gct ${values_from_arg} ${names_from_arg} ${name_path_from_arg} "${tsv_file}" "${annotations_file}"
+    }
+    runtime {
+        docker: "mauraisa/wdl_array_tools:0.6"
+    }
+    output {
+        File gct_fie = basename(tsv_file, ".tsv") + ".gct"
+    }
+}

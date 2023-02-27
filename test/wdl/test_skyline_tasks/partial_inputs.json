@@ -3,6 +3,7 @@
   "test_skyline_tasks.skyline_template": "../../data/test_skyline_tasks/inputs/template.sky.zip",
   "test_skyline_tasks.background_fasta": "../../data/test_skyline_tasks/inputs/uniprot_human_jan2021_yeastENO1_subset.fasta",
   "test_skyline_tasks.mzml_directory": "../../data/test_skyline_tasks/inputs/mzML",
+  "test_skyline_tasks.annotations_csv": "../../data/test_skyline_tasks/inputs/replicate_annotations.csv",
   "test_skyline_tasks.library": "../../data/test_skyline_tasks/inputs/lib-quant.blib",
   "test_skyline_tasks.precursor_quality_report_template": "../../data/test_skyline_tasks/inputs/precursor_quality.skyr",
   "test_skyline_tasks.peptide_abundance_long_report_template": "../../data/test_skyline_tasks/inputs/peptide_abundance_long.skyr",

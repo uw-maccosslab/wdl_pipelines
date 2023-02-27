@@ -4,7 +4,7 @@ MAINTAINER "Aaron Maurais -- MacCoss Lab"
 
 RUN apk add --no-cache bash xmlstarlet zip
 
-ADD wdl_array_tools /usr/bin
+ADD wdl_array_tools tsv_to_gct /usr/bin
 
 WORKDIR /data
 
