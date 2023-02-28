@@ -45,16 +45,14 @@ task subset_file {
 
     String grep_command = if fixed then "fgrep" else "egrep"
     String flags = if inversed then " -v" else ""
-    String command = grep_command + flags
+    String header_filter = if header then "tail -n +2| " else ""
+    String command = header_filter + grep_command + flags
 
     command {
         ofname=$(echo "${file}"|xargs basename| sed 's/^/subset_/')
         echo "$ofname" > ofname.txt
         echo "${sep=' ' subset}" | xargs -n 1 echo > filter.txt
-        if [[ ${header} ]] ; then
-            tail -n +2 '${file}' > "$ofname"
-        fi
-        ${command} -f filter.txt '${file}' > "$ofname"
+        cat '${file}'| ${command} -f filter.txt > "$ofname"
     }
     runtime {
         docker: "mauraisa/wdl_array_tools:latest"
