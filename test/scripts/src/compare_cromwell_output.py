@@ -69,7 +69,7 @@ def main():
     print(f'Searching directory:\n{args.cromwellExecutionDir}')
     exact_matches = find_files(args.addExactMatch, args.cromwellExecutionDir) if args.addExactMatch else {}
     tsv_matches = find_files(args.addTsv, args.cromwellExecutionDir) if args.addTsv else {}
-    if exact_matches is None or tsv_matches:
+    if exact_matches is None or tsv_matches is None:
         sys.exit(1)
     if len(exact_matches) + len(tsv_matches) == 0:
         sys.exit(1)
