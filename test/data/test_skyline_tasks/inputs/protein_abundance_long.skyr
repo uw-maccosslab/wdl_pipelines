@@ -3,7 +3,6 @@
   <view name="protein_abundance_long" rowsource="pwiz.Skyline.Model.Databinding.Entities.Protein" sublist="Results!*.Value.Files" uimode="proteomic">
     <column name="" />
     <column name="Description" />
-    <column name="Gene" />
     <column name="Results!*.Value.Replicate.Name" />
     <column name="Results!*.Value.Replicate.Locator" />
     <column name="Results!*.Value.Abundance" />
