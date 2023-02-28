@@ -34,3 +34,9 @@ setup () {
     run womtool validate -i "$TEST_WDL_DIR"/test_skyline_tasks/partial_inputs.json "$TEST_WDL_DIR"/test_skyline_tasks/test_skyline_tasks.wdl
     assert_success
 }
+
+# bats test_tags=utils
+@test "Partial test_utils_tasks workflow has valid syntax" {
+    run womtool validate -i "$TEST_WDL_DIR"/test_utils_tasks/inputs.json "$TEST_WDL_DIR"/test_utils_tasks/test_utils_tasks.wdl
+    assert_success
+}

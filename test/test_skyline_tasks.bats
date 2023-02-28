@@ -3,9 +3,11 @@ setup () {
     load 'test_helper/common_setup'
     _common_setup
     TEST_NAME='test_skyline_tasks'
-
-    # delete old log file
     COMPARISON_LOG_NAME="$DIR/logs/${TEST_NAME}_file_comparison.log"
+}
+
+setup_file () {
+    setup
     rm -rf "$COMPARISON_LOG_NAME"
 }
 
@@ -49,7 +51,7 @@ setup () {
     run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
         --addTsv "$target_dir"/precursor_quality.tsv \
         "$workflow_root/call-$task_name/execution"
-    echo "$output" >> $COMPARISON_LOG_NAME
+    echo -e "${BATS_TEST_NAME}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
 }
 
@@ -61,7 +63,7 @@ setup () {
     run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
         --addTsv "$target_dir"/peptide_abundance_long.tsv \
         "$workflow_root/call-$task_name/execution"
-    echo "$output" >> $COMPARISON_LOG_NAME
+    echo -e "${BATS_TEST_NAME}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
 }
 
@@ -73,7 +75,7 @@ setup () {
     run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
         --addTsv "$target_dir"/protein_abundance_long.tsv \
         "$workflow_root/call-$task_name/execution"
-    echo "$output" >> $COMPARISON_LOG_NAME
+    echo -e "${BATS_TEST_NAME}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
 }
 
@@ -117,7 +119,7 @@ setup () {
     run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
         --addTsv "$target_dir"/precursor_quality.tsv \
         "$workflow_root/call-$task_name/execution"
-    echo "$output" >> $COMPARISON_LOG_NAME
+    echo -e "${BATS_TEST_NAME}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
 }
 
@@ -129,7 +131,7 @@ setup () {
     run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
         --addTsv "$target_dir"/peptide_abundance_long.tsv \
         "$workflow_root/call-$task_name/execution"
-    echo "$output" >> $COMPARISON_LOG_NAME
+    echo -e "${BATS_TEST_NAME}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
 }
 
@@ -141,7 +143,7 @@ setup () {
     run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
         --addTsv "$target_dir"/protein_abundance_long.tsv \
         "$workflow_root/call-$task_name/execution"
-    echo "$output" >> $COMPARISON_LOG_NAME
+    echo -e "${BATS_TEST_NAME}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
 }
 

@@ -3,9 +3,13 @@ setup () {
     load 'test_helper/common_setup'
     _common_setup
     TEST_NAME='test_msconvert_tasks'
+    COMPARISON_LOG_NAME="$DIR/logs/${TEST_NAME}_file_comparison.log"
+}
+
+setup_file () {
+    setup
 
     # delete old log file
-    COMPARISON_LOG_NAME="$DIR/logs/${TEST_NAME}_file_comparison.log"
     rm -rf "$COMPARISON_LOG_NAME"
 
     # generate input file from template
@@ -45,7 +49,7 @@ setup () {
     run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
         -e "$target_dir"/msconvert_params.txt \
         "$workflow_root/call-test_generate_overlapping_config/execution"
-    echo "$output" >> $COMPARISON_LOG_NAME
+    echo -e "${BATS_TEST_NAME}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
 }
 
@@ -56,6 +60,7 @@ setup () {
     run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
         -e "$target_dir"/msconvert_params.txt \
         "$workflow_root/call-test_generate_non_overlapping_config/execution"
-    echo "$output" >> $COMPARISON_LOG_NAME
+    echo -e "${BATS_TEST_NAME}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
 }
+

@@ -2,9 +2,11 @@
 setup () {
     load 'test_helper/common_setup'
     _common_setup
-
-    # delete old log file
     COMPARISON_LOG_NAME="$DIR/logs/${TEST_NAME}_file_comparison.log"
+}
+
+setup_file () {
+    setup
     rm -rf "$COMPARISON_LOG_NAME"
 }
 
@@ -27,7 +29,7 @@ setup () {
                                               -e "$target_dir"/url_list.txt \
                                               -e "$target_dir"/all_files.txt \
                                               "$workflow_root/call-test_file_ext/execution"
-    echo "$output" >> $COMPARISON_LOG_NAME
+    echo -e "${BATS_TEST_NAME}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
 }
 
@@ -40,7 +42,7 @@ setup () {
                                               -e "$target_dir"/url_list.txt \
                                               -e "$target_dir"/all_files.txt \
                                               "$workflow_root/call-test_list_files_with_limit/execution"
-    echo "$output" >> $COMPARISON_LOG_NAME
+    echo -e "${BATS_TEST_NAME}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
 }
 
@@ -53,7 +55,7 @@ setup () {
                                               -e "$target_dir"/url_list.txt \
                                               -e "$target_dir"/all_files.txt \
                                               "$workflow_root/call-test_list_files_without_limit/execution"
-    echo "$output" >> $COMPARISON_LOG_NAME
+    echo -e "${BATS_TEST_NAME}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
 }
 
