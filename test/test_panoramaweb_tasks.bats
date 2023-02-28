@@ -29,7 +29,7 @@ setup_file () {
                                               -e "$target_dir"/url_list.txt \
                                               -e "$target_dir"/all_files.txt \
                                               "$workflow_root/call-test_file_ext/execution"
-    echo -e "${BATS_TEST_NAME}\n${output}\n" >> $COMPARISON_LOG_NAME
+    echo -e "${BATS_TEST_NAME}\n${BATS_RUN_COMMAND}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
 }
 
@@ -42,7 +42,7 @@ setup_file () {
                                               -e "$target_dir"/url_list.txt \
                                               -e "$target_dir"/all_files.txt \
                                               "$workflow_root/call-test_list_files_with_limit/execution"
-    echo -e "${BATS_TEST_NAME}\n${output}\n" >> $COMPARISON_LOG_NAME
+    echo -e "${BATS_TEST_NAME}\n${BATS_RUN_COMMAND}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
 }
 
@@ -55,7 +55,7 @@ setup_file () {
                                               -e "$target_dir"/url_list.txt \
                                               -e "$target_dir"/all_files.txt \
                                               "$workflow_root/call-test_list_files_without_limit/execution"
-    echo -e "${BATS_TEST_NAME}\n${output}\n" >> $COMPARISON_LOG_NAME
+    echo -e "${BATS_TEST_NAME}\n${BATS_RUN_COMMAND}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
 }
 

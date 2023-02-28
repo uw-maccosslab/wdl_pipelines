@@ -49,7 +49,7 @@ setup_file () {
     run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
         -e "$target_dir"/stdout \
         "$workflow_root/call-dirname_url_test/execution"
-    echo -e "${BATS_TEST_NAME}\n${output}\n" >> $COMPARISON_LOG_NAME
+    echo -e "${BATS_TEST_NAME}\n${BATS_RUN_COMMAND}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
 }
 
@@ -60,7 +60,7 @@ setup_file () {
     run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
         -e "$target_dir"/stdout \
         "$workflow_root/call-dirname_real_file_test/execution"
-    echo -e "${BATS_TEST_NAME}\n${output}\n" >> $COMPARISON_LOG_NAME
+    echo -e "${BATS_TEST_NAME}\n${BATS_RUN_COMMAND}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
 }
 
@@ -71,7 +71,7 @@ setup_file () {
     run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
         -e "$target_dir"/stdout \
         "$workflow_root/call-dirname_fake_file_test/execution"
-    echo -e "${BATS_TEST_NAME}\n${output}\n" >> $COMPARISON_LOG_NAME
+    echo -e "${BATS_TEST_NAME}\n${BATS_RUN_COMMAND}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
 }
 
@@ -83,7 +83,7 @@ setup_file () {
         -e "$target_dir"/filter.txt \
         -e "$target_dir"/subset_all_files.txt \
         "$workflow_root/call-subset_fixed/execution"
-    echo -e "${BATS_TEST_NAME}\n${output}\n" >> $COMPARISON_LOG_NAME
+    echo -e "${BATS_TEST_NAME}\n${BATS_RUN_COMMAND}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
 }
 
@@ -95,7 +95,7 @@ setup_file () {
         -e "$target_dir"/filter.txt \
         -e "$target_dir"/subset_all_files.txt \
         "$workflow_root/call-subset_regex/execution"
-    echo -e "${BATS_TEST_NAME}\n${output}\n" >> $COMPARISON_LOG_NAME
+    echo -e "${BATS_TEST_NAME}\n${BATS_RUN_COMMAND}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
 }
 
@@ -107,7 +107,7 @@ setup_file () {
         -e "$target_dir"/filter.txt \
         -e "$target_dir"/subset_all_files.txt \
         "$workflow_root/call-subset_inversed/execution"
-    echo -e "${BATS_TEST_NAME}\n${output}\n" >> $COMPARISON_LOG_NAME
+    echo -e "${BATS_TEST_NAME}\n${BATS_RUN_COMMAND}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
 }
 
@@ -119,7 +119,7 @@ setup_file () {
         -e "$target_dir"/filter.txt \
         -e "$target_dir"/subset_all_files.txt \
         "$workflow_root/call-subset_with_header/execution"
-    echo -e "${BATS_TEST_NAME}\n${output}\n" >> $COMPARISON_LOG_NAME
+    echo -e "${BATS_TEST_NAME}\n${BATS_RUN_COMMAND}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
 }
 

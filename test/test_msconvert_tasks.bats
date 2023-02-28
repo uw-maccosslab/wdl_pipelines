@@ -49,7 +49,7 @@ setup_file () {
     run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
         -e "$target_dir"/msconvert_params.txt \
         "$workflow_root/call-test_generate_overlapping_config/execution"
-    echo -e "${BATS_TEST_NAME}\n${output}\n" >> $COMPARISON_LOG_NAME
+    echo -e "${BATS_TEST_NAME}\n${BATS_RUN_COMMAND}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
 }
 
@@ -60,7 +60,7 @@ setup_file () {
     run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
         -e "$target_dir"/msconvert_params.txt \
         "$workflow_root/call-test_generate_non_overlapping_config/execution"
-    echo -e "${BATS_TEST_NAME}\n${output}\n" >> $COMPARISON_LOG_NAME
+    echo -e "${BATS_TEST_NAME}\n${BATS_RUN_COMMAND}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
 }
 
