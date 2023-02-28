@@ -28,7 +28,7 @@ setup_file () {
     assert_success
 
     # clean up cromwell dir
-    previous_workflow_root=$(get_workflow_root "$DIR"/cromwell/metadata/partial_"$TEST_NAME".json)
+    previous_workflow_root=$(get_workflow_root "$DIR"/cromwell/metadata/full_"$TEST_NAME".json)
     if [[ -d "$previous_workflow_root" ]] ; then
         rm -rf "$previous_workflow_root"
     fi

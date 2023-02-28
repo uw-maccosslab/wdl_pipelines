@@ -7,7 +7,7 @@ _common_setup () {
     # set up directory variables
     DIR="$( cd "$( dirname "$BATS_TEST_FILENAME" )" >/dev/null 2>&1 && pwd )"
     TEST_WDL_DIR="$DIR/wdl/"
-    PROJECT_ROOT="$DIR/../"
+    PROJECT_ROOT="$(realpath $DIR/../)"
     WDL_DIR="$PROJECT_ROOT/wdl/"
     SCRIPTS_DIR="$DIR/scripts/"
 
