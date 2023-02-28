@@ -48,17 +48,19 @@ task subset_file {
     String command = grep_command + flags
 
     command {
-        echo "${sep=' ' subset}" | xargs -n 1 echo > subset_filter.txt
+        ofname=$(echo "${file}"|xargs basename| sed 's/^/subset_/')
+        echo "$ofname" > ofname.txt
+        echo "${sep=' ' subset}" | xargs -n 1 echo > filter.txt
         if [[ ${header} ]] ; then
-            head -n 1 '${file}' > subset.tsv
+            tail -n +2 '${file}' > "$ofname"
         fi
-        ${command} -f subset_filter.txt '${file}' > subset.txt
+        ${command} -f filter.txt '${file}' > "$ofname"
     }
     runtime {
         docker: "mauraisa/wdl_array_tools:latest"
     }
     output {
-        File subset_file = "subset.txt"
+        File subset_file = read_string("ofname.txt")
     }
 
     meta {

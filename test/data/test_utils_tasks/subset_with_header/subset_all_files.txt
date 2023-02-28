@@ -1,0 +1,6 @@
+20180910_18Ocurves_csf_library_400-500_014.raw
+20180910_18Ocurves_csf_library_500-600_015.raw
+20180910_18Ocurves_csf_library_600-700_016.raw
+20180910_18Ocurves_csf_library_700-800_017.raw
+20180910_18Ocurves_csf_library_800-900_018.raw
+20180910_18Ocurves_csf_library_900-1000_019.raw

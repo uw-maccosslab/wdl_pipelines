@@ -1,0 +1,6 @@
+20180910_18Ocurves_csf_0ug_003.raw
+20180910_18Ocurves_csf_0ug_022.raw
+20180910_18Ocurves_csf_0ug_034.raw
+20180910_18Ocurves_csf_1ug_012.raw
+20180910_18Ocurves_csf_1ug_032.raw
+20180910_18Ocurves_csf_1ug_044.raw

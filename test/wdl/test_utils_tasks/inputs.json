@@ -1,0 +1,5 @@
+{
+  "test_utils_tasks.subset_file": "../../data/test_utils_tasks/inputs/all_files.txt",
+  "test_utils_tasks.subset_file_with_header": "../../data/test_utils_tasks/inputs/all_files_with_header.txt"
+}
+
