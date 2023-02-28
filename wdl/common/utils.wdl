@@ -49,7 +49,6 @@ task subset_file {
 
     command {
         echo "${sep=' ' subset}" | xargs -n 1 echo > subset_filter.txt
-        rm -fv subset.txt
         if [[ ${header} ]] ; then
             head -n 1 '${file}' > subset.tsv
         fi
@@ -81,10 +80,7 @@ task dirname {
         String path
     }
     command {
-        python <<CODE
-            from os.path import dirname
-            print(dirname(${path}))
-        CODE
+        dirname ${path}
     }
     runtime {
         docker: "mauraisa/wdl_array_tools:latest"
