@@ -165,22 +165,3 @@ task import_skyline {
   }
 }
 
-
-task generate_msconvert_config {
-    input {
-      File mzml_file
-    }
-
-  command {
-    generateMsconvertConfig "${mzml_file}"
-  }
-
-  runtime {
-    docker: "mauraisa/generate_msconvert_config:latest"
-  }
-
-  output {
-    File msconvert_config = "msconvert_params.txt"
-  }
-}
-

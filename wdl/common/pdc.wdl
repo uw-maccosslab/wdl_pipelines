@@ -1,7 +1,4 @@
 
-version 1.0
-
-
 task download_study_metadata {
     input {
       String study_id
