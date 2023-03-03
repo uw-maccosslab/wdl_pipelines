@@ -59,3 +59,14 @@ setup_file () {
     [ "$status" -eq 0 ]
 }
 
+# bats test_tags=check
+@test "Check test_download_public_file output" {
+    workflow_root=$(get_workflow_root "$DIR"/cromwell/metadata/test_panoramaweb_tasks.json)
+    target_dir="${PROJECT_ROOT}/test/data/test_panorama_list_files/test_download_public_file"
+    run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
+                                              -e "$target_dir"/px.xml \
+                                              "$workflow_root/call-test_download_public_file/execution"
+    echo -e "${BATS_TEST_NAME}\n${BATS_RUN_COMMAND}\n${output}\n" >> $COMPARISON_LOG_NAME
+    [ "$status" -eq 0 ]
+}
+

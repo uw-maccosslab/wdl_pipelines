@@ -68,15 +68,12 @@ task list_files {
 task download_file {
     input {
       String file_url
-      String api_key
+      String? api_key
     }
 
-    command {
-        java -jar /code/PanoramaClient.jar \
-             -d \
-             -w "${file_url}" \
-             -k "${api_key}"
-    }
+    command <<<
+        java -jar /code/PanoramaClient.jar -d -w '~{file_url}' ~{"-k '" + api_key + "'"}
+    >>>
 
     runtime {
         docker: "proteowizard/panorama-client-java:1.3"
