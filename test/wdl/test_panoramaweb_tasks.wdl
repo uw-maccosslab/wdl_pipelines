@@ -30,15 +30,5 @@ workflow test_panorama_list_files {
     call panorama.download_file as test_download_public_file {
         input: file_url = download_public_file_url
     }
-
-    # call panorama.list_files as test_regex_filter_without_limit {
-
-    # }
-
-    # call panorama.list_files as test_regex_filter_with_limit {
-    #     input:
-    #         folder_webdav_url = base_folder_url + 
-    # }
-
 }
 

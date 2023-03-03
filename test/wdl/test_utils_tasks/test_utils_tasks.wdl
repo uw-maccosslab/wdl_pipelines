@@ -1,6 +1,7 @@
 version 1.0
 
 import "common/utils.wdl" as utils
+import "common/file_interface.wdl" as file_interface
 
 workflow test_utils_tasks {
     input {
@@ -12,9 +13,9 @@ workflow test_utils_tasks {
     }
 
     # tests dirname
-    call utils.dirname as dirname_url_test { input: path = dirname_test_url }
-    call utils.dirname as dirname_real_file_test { input: path = dirname_test_real_file }
-    call utils.dirname as dirname_fake_file_test { input: path = dirname_test_fake_file }
+    call file_interface.dirname as dirname_url_test { input: path = dirname_test_url }
+    call file_interface.dirname as dirname_real_file_test { input: path = dirname_test_real_file }
+    call file_interface.dirname as dirname_fake_file_test { input: path = dirname_test_fake_file }
 
     # test subset_file
     call utils.subset_file as subset_fixed {

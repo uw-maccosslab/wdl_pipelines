@@ -75,18 +75,3 @@ task subset_file {
     }
 }
 
-task dirname {
-    input {
-        String path
-    }
-    command {
-        dirname ${path}
-    }
-    runtime {
-        docker: "mauraisa/wdl_array_tools:latest"
-    }
-    output {
-        String dirname = read_string(stdout())
-    }
-}
-

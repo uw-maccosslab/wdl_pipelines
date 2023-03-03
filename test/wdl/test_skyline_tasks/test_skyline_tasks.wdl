@@ -1,6 +1,7 @@
 version 1.0
 
 import "common/proteowizard/proteowizard.wdl" as pwiz
+import "common/file_interface.wdl" as file_interface
 
 workflow test_skyline_tasks {
     input {
@@ -17,7 +18,7 @@ workflow test_skyline_tasks {
     
     # add results to empty skyline document
     if (!defined(skyline_doc)) {
-        call list_files as list_wide_mzml_files {
+        call file_interface.list_local_files as list_wide_mzml_files {
             input: path = mzml_directory
         }
 
@@ -71,43 +72,6 @@ workflow test_skyline_tasks {
         input: tsv_file = export_protein_report.report,
                annotations_file = select_first([annotations_csv,]),
                values_from = "ProteinAbundance"
-    }
-}
-
-task list_files {
-    input {
-        File path
-        String? include_regex
-        String? exclude_regex
-        Boolean recursive = false
-    }
-    
-    String list_command = if recursive then "find ${path} -type f" else "ls ${path}" +
-        if defined(include_regex) then "| grep ${include_regex}" else "" +
-        if defined(exclude_regex) then "| grep -v ${exclude_regex}" else ""
-
-    command {
-        if ! [ -d ${path} ] ; then
-            echo "${path} is not a directory!"
-            exit 1
-        fi
-
-        ${list_command} |sed 's#^#${path}/#' > files.txt
-    }
-    output {
-        Array[File] files = read_lines("files.txt")
-    }
-
-    parameter_meta {
-        path: "The directory to list."
-        include_regex: "Only include files matching this regex."
-        exclude_regex: "Exclude files matching this regex."
-        recursive: "Recursively list path? default = false"
-    }
-    meta {
-        author: "Aaron Maurais"
-        email: "mauraisa@uw.edu"
-        description: "List files in directory on local machine."
     }
 }
 
