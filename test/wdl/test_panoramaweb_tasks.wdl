@@ -10,7 +10,7 @@ workflow test_panorama_list_files {
     }
 
     call panorama.list_files as test_file_ext {
-        input: 
+        input:
             folder_webdav_url = base_folder_url,
             file_ext = "sky.zip"
     }

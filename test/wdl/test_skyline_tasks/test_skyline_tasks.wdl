@@ -1,7 +1,7 @@
 version 1.0
 
 import "common/proteowizard/proteowizard.wdl" as pwiz
-import "common/file_interface.wdl" as file_interface
+import "common/file_interface/file_interface.wdl" as file_interface
 
 workflow test_skyline_tasks {
     input {
@@ -15,7 +15,7 @@ workflow test_skyline_tasks {
         File protein_abundance_long_report_template
         File? annotations_csv
     }
-    
+
     # add results to empty skyline document
     if (!defined(skyline_doc)) {
         call file_interface.list_local_files as list_wide_mzml_files {
@@ -39,7 +39,7 @@ workflow test_skyline_tasks {
             call pwiz.skyline_annotate_document {
                 input: skyline_zip = skyline_import_results.skyline_output,
                        annotation_csv = select_first([annotations_csv,])
-                       
+
             }
         }
 

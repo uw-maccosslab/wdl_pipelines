@@ -1,7 +1,7 @@
 version 1.0
 
 import "common/utils.wdl" as utils
-import "common/file_interface.wdl" as file_interface
+import "common/file_interface/file_interface.wdl" as file_interface
 
 workflow test_utils_tasks {
     input {

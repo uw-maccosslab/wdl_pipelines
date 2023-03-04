@@ -8,6 +8,7 @@ setup () {
 
 setup_file () {
     setup
+    _copy_files
     rm -rf "$COMPARISON_LOG_NAME"
 }
 
