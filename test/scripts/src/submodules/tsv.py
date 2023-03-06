@@ -14,21 +14,43 @@ def detect_deliminator(fname):
 class Tsv():
     FP_TOLERANCE = 1e-6
 
-    def __init__(self, fname: str):
+    def __init__(self):
+        self.fname = ''
+        self.delim = ''
+        self.selection = []
+        self.key_cols = []
+        self.float_cols = []
+        self.index = {}
+
+
+    def read(self, fname: str):
         self.fname = fname
         self.delim = detect_deliminator(fname)
+
+        # read csv into temporary dataframe
         df = pd.read_csv(fname, sep = self.delim)
+        self._parse_df(df)
+
+
+    def _parse_df(self, df):
+        # use string and integer columns as keys
         str_selection = (df.applymap(type) == str).all().values.tolist()
         int_selection = [str(x).find('float') != 0 for x in df.dtypes.values.tolist()]
         selection = [s or i for s, i in zip(str_selection, int_selection)]
         self.selection = selection
         self.key_cols = df.columns[selection].values.tolist()
+
+        # do floating point comparison for floats
         self.float_cols = df.columns[[not x for x in selection]].values.tolist()
+
+        # make sure column names are uniquely identified
         if len(set(self.key_cols + self.float_cols)) != len(self.key_cols + self.float_cols):
-            raise RuntimeError(f'Column names in {fname} are not uniquely identified!')
+            raise RuntimeError(f'Column names in {self.fname} are not uniquely identified!')
         keys = df[self.key_cols].apply(lambda x: '\t'.join([str(v) for v in x]), axis = 1)
         if len(keys) != len(set(keys)):
-            raise RuntimeError(f'String columns in {fname} are not uniquely identified!')
+            raise RuntimeError(f'String columns in {self.fname} are not uniquely identified!')
+
+        # populate index with numerical arrays
         self.index = {k: np.array(v) for k, v in zip(keys, df[self.float_cols].values)}
 
 

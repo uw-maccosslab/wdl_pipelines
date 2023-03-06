@@ -50,8 +50,10 @@ def find_files(target_files, output_dir):
 
 
 def compare_tsvs(target_fname, test_fname):
-    target = tsv.Tsv(target_fname)
-    test = tsv.Tsv(test_fname)
+    target = tsv.Tsv()
+    target.read(target_fname)
+    test = tsv.Tsv()
+    test.read(test_fname)
     return target.compare(test)
 
 
