@@ -118,7 +118,7 @@ setup_file () {
     target_dir="${PROJECT_ROOT}/test/data/"$TEST_NAME"/subset_with_header"
     run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
         -e "$target_dir"/filter.txt \
-        -e "$target_dir"/subset_all_files.txt \
+        -e "$target_dir"/subset_all_files_with_header.txt \
         "$workflow_root/call-subset_with_header/execution"
     echo -e "${BATS_TEST_NAME}\n${BATS_RUN_COMMAND}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]

@@ -52,7 +52,11 @@ task subset_file {
         ofname=$(echo "${file}"|xargs basename| sed 's/^/subset_/')
         echo "$ofname" > ofname.txt
         echo "${sep=' ' subset}" | xargs -n 1 echo > filter.txt
-        cat '${file}'| ${command} -f filter.txt > "$ofname"
+        if ${header} ; then
+            echo 'Printing header...'
+            head -n 1 '${file}' > "$ofname"
+        fi
+        cat '${file}'| ${command} -f filter.txt >> "$ofname"
     }
     runtime {
         docker: "mauraisa/wdl_array_tools:latest"

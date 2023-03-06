@@ -36,7 +36,7 @@ workflow test_utils_tasks {
                fixed=false
     }
     call utils.subset_file as subset_with_header {
-        input: file=subset_file,
+        input: file=subset_file_with_header,
                subset=["library"],
                fixed=true,
                header=true
