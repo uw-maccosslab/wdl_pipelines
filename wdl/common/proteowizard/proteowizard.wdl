@@ -414,7 +414,7 @@ task generate_gct {
         tsv_to_gct ${values_from_arg} ${names_from_arg} ${name_path_from_arg} "${tsv_file}" "${annotations_file}"
     }
     runtime {
-        docker: "mauraisa/wdl_array_tools:0.6"
+        docker: "mauraisa/wdl_array_tools:0.7"
     }
     output {
         File gct_file = basename(tsv_file, ".tsv") + ".gct"
