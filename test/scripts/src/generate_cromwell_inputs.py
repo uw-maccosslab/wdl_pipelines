@@ -4,8 +4,13 @@ import sys
 import os
 import json
 
+from .submodules.api_key import add_api_key, API_KEY_NAME
+
+
 def main():
     parser = argparse.ArgumentParser(description='Replace relative file paths with absolute file paths in cromwell inputs file.')
+    parser.add_argument('-k', '--apiKey', default=None,
+                        help=f'json formated file with a single key value pair: "{API_KEY_NAME}": <key>')
     parser.add_argument('-o', '--ofname', default=None,
                         help='Optional output file name. If not specified, output is printed to stdout.')
     parser.add_argument('inputs_template', help='Inputs template with file datatypes marked.')
@@ -38,6 +43,10 @@ def main():
             sys.stderr.write(f'ERROR: File "{inputs[var]}" does not exist!\n')
     if any_missing:
         sys.exit(1)
+
+    # add panorama api key if necissary
+    if args.apiKey:
+        add_api_key(inputs, args.apiKey)
 
     if args.ofname is None:
         sys.stdout.write(json.dumps(inputs, indent=4) + '\n')

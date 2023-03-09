@@ -10,5 +10,6 @@ setup(name='test_scripts',
       install_requires=['pandas>=1.5.3'],
       entry_points={'console_scripts': ['compare_cromwell_output=src:compare_cromwell_output',
                                         'generate_cromwell_inputs=src:generate_cromwell_inputs',
-                                        'process_import_urls=src:process_import_urls']}
+                                        'process_import_urls=src:process_import_urls',
+                                        'add_api_key=src:add_api_key']}
 )
