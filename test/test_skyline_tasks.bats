@@ -80,6 +80,30 @@ setup_file () {
     [ "$status" -eq 0 ]
 }
 
+# bats test_tags=check, full
+@test "Check full generate_peptide_gct output" {
+    task_name='generate_peptide_gct'
+    workflow_root=$(get_workflow_root "$DIR"/cromwell/metadata/full_"$TEST_NAME".json)
+    target_dir="${PROJECT_ROOT}/test/data/"$TEST_NAME"/$task_name"
+    run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
+        --addGct "$target_dir"/peptide_abundance_long.gct \
+        "$workflow_root/call-$task_name/execution"
+    echo -e "${BATS_TEST_NAME}\n${BATS_RUN_COMMAND}\n${output}\n" >> $COMPARISON_LOG_NAME
+    [ "$status" -eq 0 ]
+}
+
+# bats test_tags=check, full
+@test "Check full generate_protein_gct output" {
+    task_name='generate_protein_gct'
+    workflow_root=$(get_workflow_root "$DIR"/cromwell/metadata/full_"$TEST_NAME".json)
+    target_dir="${PROJECT_ROOT}/test/data/"$TEST_NAME"/$task_name"
+    run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
+        --addGct "$target_dir"/protein_abundance_long.gct \
+        "$workflow_root/call-$task_name/execution"
+    echo -e "${BATS_TEST_NAME}\n${BATS_RUN_COMMAND}\n${output}\n" >> $COMPARISON_LOG_NAME
+    [ "$status" -eq 0 ]
+}
+
 # bats test_tags=workflow, partial
 @test "Partial test skyline workflow runs sucessfully" {
     
@@ -143,6 +167,30 @@ setup_file () {
     target_dir="${PROJECT_ROOT}/test/data/"$TEST_NAME"/$task_name"
     run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
         --addTsv "$target_dir"/protein_abundance_long.tsv \
+        "$workflow_root/call-$task_name/execution"
+    echo -e "${BATS_TEST_NAME}\n${BATS_RUN_COMMAND}\n${output}\n" >> $COMPARISON_LOG_NAME
+    [ "$status" -eq 0 ]
+}
+
+# bats test_tags=check, partial
+@test "Check partial generate_peptide_gct output" {
+    task_name='generate_peptide_gct'
+    workflow_root=$(get_workflow_root "$DIR"/cromwell/metadata/partial_"$TEST_NAME".json)
+    target_dir="${PROJECT_ROOT}/test/data/"$TEST_NAME"/$task_name"
+    run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
+        --addGct "$target_dir"/peptide_abundance_long.gct \
+        "$workflow_root/call-$task_name/execution"
+    echo -e "${BATS_TEST_NAME}\n${BATS_RUN_COMMAND}\n${output}\n" >> $COMPARISON_LOG_NAME
+    [ "$status" -eq 0 ]
+}
+
+# bats test_tags=check, partial
+@test "Check partial generate_protein_gct output" {
+    task_name='generate_protein_gct'
+    workflow_root=$(get_workflow_root "$DIR"/cromwell/metadata/partial_"$TEST_NAME".json)
+    target_dir="${PROJECT_ROOT}/test/data/"$TEST_NAME"/$task_name"
+    run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
+        --addGct "$target_dir"/protein_abundance_long.gct \
         "$workflow_root/call-$task_name/execution"
     echo -e "${BATS_TEST_NAME}\n${BATS_RUN_COMMAND}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
