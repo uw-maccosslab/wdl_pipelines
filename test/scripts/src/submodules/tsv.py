@@ -17,7 +17,6 @@ class Tsv():
     def __init__(self):
         self.fname = ''
         self.delim = ''
-        self.selection = []
         self.key_cols = []
         self.float_cols = []
         self.index = {}
@@ -37,7 +36,6 @@ class Tsv():
         str_selection = (df.applymap(type) == str).all().values.tolist()
         int_selection = [str(x).find('float') != 0 for x in df.dtypes.values.tolist()]
         selection = [s or i for s, i in zip(str_selection, int_selection)]
-        self.selection = selection
         self.key_cols = df.columns[selection].values.tolist()
 
         # do floating point comparison for floats

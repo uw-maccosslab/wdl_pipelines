@@ -4,7 +4,7 @@ import sys
 import os
 from hashlib import md5
 
-from .submodules import tsv
+from .submodules import tsv, gct
 
 def md5_sum(fname):
     ''' Get the md5 digest of a file. '''
@@ -57,12 +57,23 @@ def compare_tsvs(target_fname, test_fname):
     return target.compare(test)
 
 
+def compare_gcts(target_fname, test_fname):
+    target = gct.Gct()
+    target.read(target_fname)
+    test = gct.Gct()
+    test.read(test_fname)
+    return target.compare(test)
+
+
 def main():
     parser = argparse.ArgumentParser(description='Compare cromwell output for an individual task.')
     parser.add_argument('-e', '--addExactMatch', action='append',
                         help='Add a target file which should match exactly in the cromwell output')
     parser.add_argument('-t', '--addTsv', action='append',
                         help='Add a tsv file should almost match the cromwell output. '
+                             'Takes into account floating point error in numeric columns.')
+    parser.add_argument('-g', '--addGct', action='append',
+                        help='Add a gct file should almost match the cromwell output. '
                              'Takes into account floating point error in numeric columns.')
     parser.add_argument('cromwellExecutionDir',
                         help='')
@@ -71,7 +82,8 @@ def main():
     print(f'Searching directory:\n{args.cromwellExecutionDir}')
     exact_matches = find_files(args.addExactMatch, args.cromwellExecutionDir) if args.addExactMatch else {}
     tsv_matches = find_files(args.addTsv, args.cromwellExecutionDir) if args.addTsv else {}
-    if exact_matches is None or tsv_matches is None:
+    gct_matches = find_files(args.addGct, args.cromwellExecutionDir) if args.addGct else {}
+    if exact_matches is None or tsv_matches is None or gct_matches is None:
         sys.exit(1)
     if len(exact_matches) + len(tsv_matches) == 0:
         sys.exit(1)
@@ -90,22 +102,24 @@ def main():
         spaces = ' ' * (max_len - len(key))
         print(f'{spaces}{key}: {lhs_hash} {sign} {rhs_hash}')
 
-    aproximate_matches = 0
-    for key, value in tsv_matches.items():
-        print(f'\nTesting {key}')
-        if compare_tsvs(value[0], value[1]):
+    aprox_comparisons = [(compare_tsvs, basename, paths) for basename, paths in tsv_matches.items()]
+    aprox_comparisons += [(compare_gcts, basename, paths) for basename, paths in gct_matches.items()]
+    aprox_matches = 0
+    for compare, basename, paths in aprox_comparisons:
+        print(f'\nTesting {basename}')
+        if compare(paths[0], paths[1]):
             sign = '~'
-            aproximate_matches += 1
+            aprox_matches += 1
         else:
             sign = '!~'
-        spaces = ' ' * (max_len - len(key))
-        print(f'{spaces}{key}: target {sign} result\n')
+        spaces = ' ' * (max_len - len(basename))
+        print(f'{spaces}{basename}: target {sign} result\n')
 
     print(f'{matches} of {len(exact_matches)} files matched exactly.')
-    print(f'{aproximate_matches} of {len(tsv_matches)} tsv files matched approximately.')
+    print(f'{aprox_matches} of {len(tsv_matches)} tsv/gct files matched approximately.')
     if matches != len(exact_matches):
         sys.exit(1)
-    if aproximate_matches != len(tsv_matches):
+    if aprox_matches != len(aprox_comparisons):
         sys.exit(1)
 
 
