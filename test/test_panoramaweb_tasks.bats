@@ -2,6 +2,7 @@
 setup () {
     load 'test_helper/common_setup'
     _common_setup
+    TEST_NAME="test_panoramaweb_tasks"
     COMPARISON_LOG_NAME="$DIR/logs/${TEST_NAME}_file_comparison.log"
 }
 

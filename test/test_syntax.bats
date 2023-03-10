@@ -50,3 +50,12 @@ setup () {
     run womtool validate -i "$TEST_WDL_DIR"/test_utils_tasks/inputs.json "$TEST_WDL_DIR"/test_utils_tasks/test_utils_tasks.wdl
     assert_success
 }
+
+# bats test_tags=file_interface
+@test "local test_file_interface_tasks workflow has valid syntax" {
+    cd "$TEST_WDL_DIR"
+    run womtool validate -i "$TEST_WDL_DIR"/test_file_interface_tasks/local_inputs.json \
+        "$WDL_DIR"/common/file_interface/file_interface.wdl
+    assert_success
+}
+

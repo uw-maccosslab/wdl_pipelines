@@ -1,0 +1,6 @@
+/home/ajm/code/wdl_pipelines/test/data/common_mzML/Dora_10152022_DIA_4mzov_400_500_HeLa_CLib_100pct_48.mzML
+/home/ajm/code/wdl_pipelines/test/data/common_mzML/Dora_10152022_DIA_4mzov_500_600_HeLa_CLib_100pct_49.mzML
+/home/ajm/code/wdl_pipelines/test/data/common_mzML/Dora_10152022_DIA_4mzov_600_700_HeLa_CLib_100pct_50.mzML
+/home/ajm/code/wdl_pipelines/test/data/common_mzML/Dora_10152022_DIA_4mzov_700_800_HeLa_CLib_100pct_51.mzML
+/home/ajm/code/wdl_pipelines/test/data/common_mzML/Dora_10152022_DIA_4mzov_800_900_HeLa_CLib_100pct_52.mzML
+/home/ajm/code/wdl_pipelines/test/data/common_mzML/Dora_10152022_DIA_4mzov_900_1000_HeLa_CLib_100pct_53.mzML

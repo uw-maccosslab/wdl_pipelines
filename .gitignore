@@ -5,6 +5,9 @@ test/wdl/common/*
 test/wdl/*.zip
 test/cromwell/cromwell-workflow-logs/*
 test/cromwell/metadata/*
+test/data/common_mzML/*.dia
+test/data/common_mzML/*.mzML
+test/data/common_mzML/common_mzML.tar.gz
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
