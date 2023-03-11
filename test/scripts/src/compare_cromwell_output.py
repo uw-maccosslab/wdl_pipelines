@@ -88,9 +88,8 @@ def main():
     if len(exact_matches) + len(tsv_matches) == 0:
         sys.exit(1)
 
-    max_len = min(max(len(x) for x in exact_matches), 50)
-
     matches = 0
+    max_len = min(max(len(x) for x in exact_matches), 50)
     for key, value in exact_matches.items():
         lhs_hash = md5_sum(value[0])
         rhs_hash = md5_sum(value[1])
@@ -105,9 +104,10 @@ def main():
     aprox_comparisons = [(compare_tsvs, basename, paths) for basename, paths in tsv_matches.items()]
     aprox_comparisons += [(compare_gcts, basename, paths) for basename, paths in gct_matches.items()]
     aprox_matches = 0
-    for compare, basename, paths in aprox_comparisons:
+    max_len = min(max(len(x[1]) for x in aprox_comparisons), 50)
+    for compare_f, basename, paths in aprox_comparisons:
         print(f'\nTesting {basename}')
-        if compare(paths[0], paths[1]):
+        if compare_f(paths[0], paths[1]):
             sign = '~'
             aprox_matches += 1
         else:
@@ -116,7 +116,7 @@ def main():
         print(f'{spaces}{basename}: target {sign} result\n')
 
     print(f'{matches} of {len(exact_matches)} files matched exactly.')
-    print(f'{aprox_matches} of {len(tsv_matches)} tsv/gct files matched approximately.')
+    print(f'{aprox_matches} of {len(aprox_comparisons)} tsv/gct files matched approximately.')
     if matches != len(exact_matches):
         sys.exit(1)
     if aprox_matches != len(aprox_comparisons):

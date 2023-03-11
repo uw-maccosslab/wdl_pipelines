@@ -7,6 +7,7 @@ workflow test_skyline_tasks {
     input {
         File skyline_template
         File mzml_directory
+        String? mzml_include_regex
         File library
         File background_fasta
         File? skyline_doc
@@ -19,7 +20,9 @@ workflow test_skyline_tasks {
     # add results to empty skyline document
     if (!defined(skyline_doc)) {
         call file_interface.list_local_files as list_wide_mzml_files {
-            input: path = mzml_directory
+            input: path = mzml_directory,
+                   include_regex = mzml_include_regex,
+                   extension = "mzML"
         }
 
         # import results to skyline
@@ -28,7 +31,8 @@ workflow test_skyline_tasks {
                    background_proteome_fasta = background_fasta,
                    library = library,
                    skyline_share_zip_type = "complete",
-                   skyline_output_name = "out"
+                   skyline_output_name = "out",
+                   remove_repeats = true
         }
         call pwiz.skyline_import_results {
             input: skyline_zip = skyline_add_library.skyline_output,
@@ -42,7 +46,6 @@ workflow test_skyline_tasks {
 
             }
         }
-
     }
 
     # export reports
@@ -66,12 +69,14 @@ workflow test_skyline_tasks {
     call pwiz.generate_gct as generate_peptide_gct {
         input: tsv_file = export_peptide_report.report,
                annotations_file = select_first([annotations_csv,]),
-               values_from = "NormalizedArea"
+               values_from = "NormalizedArea",
+               id_cols = ["Protein", "PeptideModifiedSequence"]
     }
     call pwiz.generate_gct as generate_protein_gct {
         input: tsv_file = export_protein_report.report,
                annotations_file = select_first([annotations_csv,]),
-               values_from = "ProteinAbundance"
+               values_from = "ProteinAbundance",
+               id_cols = ["Protein",]
     }
 }
 

@@ -51,7 +51,7 @@ setup_file () {
     workflow_root=$(get_workflow_root "$DIR"/cromwell/metadata/local_"$TEST_NAME".json)
     target_dir="${PROJECT_ROOT}/test/data/"$TEST_NAME"/$task_name"
     run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
-        -e "$target_dir"/abs_paths.txt \
+        -e "$target_dir"/files.txt \
         "$workflow_root/call-$task_name/execution"
     echo -e "${BATS_TEST_NAME}\n${BATS_RUN_COMMAND}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]
@@ -63,7 +63,7 @@ setup_file () {
     workflow_root=$(get_workflow_root "$DIR"/cromwell/metadata/local_"$TEST_NAME".json)
     target_dir="${PROJECT_ROOT}/test/data/"$TEST_NAME"/$task_name"
     run "$SCRIPTS_DIR"/venv/bin/compare_cromwell_output -e "$target_dir"/rc \
-        -e "$target_dir"/abs_paths.txt \
+        -e "$target_dir"/files.txt \
         "$workflow_root/call-$task_name/execution"
     echo -e "${BATS_TEST_NAME}\n${BATS_RUN_COMMAND}\n${output}\n" >> $COMPARISON_LOG_NAME
     [ "$status" -eq 0 ]

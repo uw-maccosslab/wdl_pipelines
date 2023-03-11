@@ -127,6 +127,7 @@ task skyline_add_library {
         File background_proteome_fasta
         File library
         String? skyline_output_name
+        Boolean remove_repeats = false
         String? skyline_share_zip_type = "complete"
     } 
 
@@ -147,6 +148,7 @@ task skyline_add_library {
         wine SkylineCmd --in="~{skyline_template_basename}.sky" --log-file=skyline_add_library.log \
             --import-fasta="~{background_proteome_fasta}" --add-library-path="$lib_basename" \
             --out="~{local_skyline_output_name}.sky" --save \
+            ~{true="--refine-remove-repeats --refine-min-peptides=1" false="" remove_repeats} \
             --share-zip="~{local_skyline_output_name}.sky.zip" --share-type="~{skyline_share_zip_type}"
     >>>
 
@@ -161,6 +163,7 @@ task skyline_add_library {
     parameter_meta {
         skyline_template_zip: "An empty skyline document with the desired transition and peptide settings."
         library: "A library file in a format natively supported by Skyline (.blib or .elib)"
+        remove_repeats: "Should repeated peptides be removed from target list?"
     }
 
     meta {
@@ -398,20 +401,36 @@ task generate_gct {
         String? values_from
         String? names_from
         String? name_path_from
+        Array[String]? id_cols
     }
 
-    command {
+    command <<<
         # Link input files to execution directory
         # This is necissary because cromwell picks terrible file names which begin with dashes
-        for f in "${tsv_file}" "${annotations_file}" ; do
+        for f in "~{tsv_file}" "~{annotations_file}" ; do
             ln "$f" .
         done
+
+        # construct id_cols_arg is necissary
+        id_col_ar=( ~{sep=" " id_cols} )
+        id_col_ar_len=${#id_col_ar[@]}
+        if (( ${id_col_ar_len} > 0 )) ; then
+            id_col_ar=( '~{sep="' '" id_cols}' )
+            for ((i = 0; i < ${id_col_ar_len}; i++)) ; do
+                if (( i > 0 & i <= ${id_col_ar_len} - 1 )) ; then
+                    id_col_arg="${id_col_arg},${id_col_ar[i]}"
+                else
+                    id_col_arg="${id_col_arg}${id_col_ar[i]}"
+                fi
+            done
+        fi
 
         tsv_to_gct ~{"--valuesFrom '" + values_from + "'"} \
             ~{"--namesFrom'" + names_from + "'"} \
             ~{"--namesPathFrom '" + name_path_from + "'"} \
-            '~{tsv_file}' '~{annotations_file}'
-    }
+            ~{true="--idCols" false="" defined(id_cols)} "${id_col_arg}" \
+            '~{basename(tsv_file)}' '~{basename(annotations_file)}'
+    >>>
     runtime {
         docker: "mauraisa/wdl_array_tools:0.7"
     }
