@@ -104,7 +104,8 @@ def main():
     aprox_comparisons = [(compare_tsvs, basename, paths) for basename, paths in tsv_matches.items()]
     aprox_comparisons += [(compare_gcts, basename, paths) for basename, paths in gct_matches.items()]
     aprox_matches = 0
-    max_len = min(max(len(x[1]) for x in aprox_comparisons), 50)
+    if len(aprox_comparisons) > 0:
+        max_len = min(max(len(x[1]) for x in aprox_comparisons), 50)
     for compare_f, basename, paths in aprox_comparisons:
         print(f'\nTesting {basename}')
         if compare_f(paths[0], paths[1]):

@@ -138,8 +138,7 @@ task list_local_files {
         Boolean allow_empty = false
     }
     
-    String list_command = "ls ${path}"
-        if defined(extension) then "/*.${extension}" else ""
+    String list_command = "ls ${path}" + if defined(extension) then "/*.${extension}" else ""
     
     command <<<
         if ! [[ -d ~{path} ]] ; then
