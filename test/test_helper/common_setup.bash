@@ -25,10 +25,6 @@ _copy_common () {
     echo "Processing import urls..." > "$DIR"/logs/process_import_urls.log
     for f in $(find common -type f|grep '\.wdl$') ; do
         echo >> "$DIR"/logs/process_import_urls.log
-        echo "$SCRIPTS_DIR"/venv/bin/process_import_urls '--inPlace' \
-            '--logFile' "\"$DIR/logs/process_import_urls.log\"" \
-            '"https://raw.githubusercontent.com/uw-maccosslab/wdl_pipelines/master/wdl/"' \
-            "\"$f\"" >> "$DIR"/logs/process_import_urls.log
         "$SCRIPTS_DIR"/venv/bin/process_import_urls --inPlace \
             --logFile "$DIR"/logs/process_import_urls.log \
             'https://raw.githubusercontent.com/uw-maccosslab/wdl_pipelines/master/wdl/' \

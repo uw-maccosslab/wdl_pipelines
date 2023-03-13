@@ -17,6 +17,7 @@ def replace_import_paths(lines, fname, repo_root_url, log_file=None):
     file_abs_path = os.path.abspath(fname)
     if log_file and fname:
         with open(log_file, 'a') as outF:
+            outF.write('\n\n{}\n'.format(' '.join(sys.argv)))
             outF.write(f'\nProcessing {fname}...\n')
 
     ret = list()
