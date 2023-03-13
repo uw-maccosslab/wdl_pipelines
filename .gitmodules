@@ -16,3 +16,6 @@
 [submodule "docker/wdl_array_tools"]
 	path = docker/wdl_array_tools
 	url = https://github.com/ajmaurais/wdl_array_tools
+[submodule "wdl/dev_wdl_pipelines"]
+	path = wdl/dev_wdl_pipelines
+	url = ../dev_wdl_pipelines
