@@ -18,8 +18,8 @@ RUN cd /code && mkdir percolator && cd percolator \
     && tar xf rel-"$PERCOLATOR_VERSION".tar.gz \
     && cd percolator-rel-"$PERCOLATOR_VERSION" \
     && cmake . && make && cp src/percolator /usr/local/bin
-# 
-# # Download EncyclopeDIA 
+
+# Download EncyclopeDIA 
 ENV VERSION=2.12.30
 RUN cd /code; wget -O "encyclopedia-$VERSION-executable.jar" "https://bitbucket.org/searleb/encyclopedia/downloads/encyclopedia-$VERSION-executable.jar"
 
