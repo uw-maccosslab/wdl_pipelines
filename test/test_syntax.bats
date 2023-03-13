@@ -1,7 +1,7 @@
 
 setup_file () {
     load 'test_helper/common_setup'
-    _copy_files
+    _copy_common
 }
 
 setup () {

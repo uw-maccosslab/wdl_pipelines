@@ -12,7 +12,7 @@ _common_setup () {
     WDL_DIR="$PROJECT_ROOT/wdl/"
 }
 
-_copy_files () {
+_copy_common () {
     DIR="$( cd "$( dirname "$BATS_TEST_FILENAME" )" >/dev/null 2>&1 && pwd )"
     TEST_WDL_DIR="$DIR/wdl/"
     PROJECT_ROOT="$(realpath $DIR/../)"

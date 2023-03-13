@@ -8,7 +8,7 @@ setup () {
 
 setup_file () {
     setup
-    _copy_files
+    _copy_common
 
     # delete old log file
     rm -rf "$COMPARISON_LOG_NAME"
