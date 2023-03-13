@@ -113,21 +113,6 @@ workflow get_ms_data_files {
     }
 }
 
-task dirname {
-    input {
-        String path
-    }
-    command {
-        dirname ${path}
-    }
-    runtime {
-        docker: "mauraisa/wdl_array_tools:latest"
-    }
-    output {
-        String dirname = read_string(stdout())
-    }
-}
-
 
 task list_local_files {
     input {

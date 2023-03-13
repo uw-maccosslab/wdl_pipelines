@@ -2,6 +2,7 @@
 setup_file () {
     load 'test_helper/common_setup'
     _copy_common
+    _copy_pipelines
 }
 
 setup () {
@@ -59,3 +60,41 @@ setup () {
     assert_success
 }
 
+# bats test_tags=pipeline
+@test "Panorama_Msconvert workflow has valid syntax" {
+    cd "$TEST_WDL_DIR"
+    run womtool validate -i "$TEST_WDL_DIR"/pipelines/Panorama_Msconvert/input_template.json \
+        "$TEST_WDL_DIR"/pipelines/Panorama_Msconvert/workflow.wdl
+    assert_success
+}
+
+# bats test_tags=pipeline
+@test "DIA_PDC_DiaNN workflow has valid syntax" {
+    cd "$TEST_WDL_DIR"
+    run womtool validate -i "$TEST_WDL_DIR"/pipelines/DIA_PDC_DiaNN/input_template.json \
+        "$TEST_WDL_DIR"/pipelines/DIA_PDC_DiaNN/workflow.wdl
+    assert_success
+}
+
+# bats test_tags=pipeline
+@test "DIA_PDC_EncyclopeDIA workflow has valid syntax" {
+    cd "$TEST_WDL_DIR"
+    run womtool validate -i "$TEST_WDL_DIR"/pipelines/DIA_PDC_EncyclopeDIA/input_template.json \
+        "$TEST_WDL_DIR"/pipelines/DIA_PDC_EncyclopeDIA/workflow.wdl
+    assert_success
+}
+
+# bats test_tags=pipeline
+@test "DIA_Panorama_EncyclopeDIA workflow has valid syntax" {
+    cd "$TEST_WDL_DIR"
+    run womtool validate -i "$TEST_WDL_DIR"/pipelines/DIA_Panorama_EncyclopeDIA/input_template.json \
+        "$TEST_WDL_DIR"/pipelines/DIA_Panorama_EncyclopeDIA/workflow.wdl
+    assert_success
+}
+
+@test "DIA_Panorama_DiaNN workflow has valid syntax" {
+    cd "$TEST_WDL_DIR"
+    run womtool validate -i "$TEST_WDL_DIR"/pipelines/DIA_Panorama_DiaNN/input_template.json \
+        "$TEST_WDL_DIR"/pipelines/DIA_Panorama_DiaNN/workflow.wdl
+    assert_success
+}

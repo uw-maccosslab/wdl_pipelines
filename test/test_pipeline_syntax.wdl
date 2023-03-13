@@ -1,7 +1,7 @@
 
 setup () {
     DIR="$( cd "$( dirname "$BATS_TEST_FILENAME" )" >/dev/null 2>&1 && pwd )"
-    WDL_DIRNAME="$DIR/../wdl/dev_wdl_pipelines/wdl"
+    WDL_DIRNAME="$DIR/../wdl/dev_wdl_pipelines"
     
     load 'test_helper/common_setup.bash'
     _common_setup
