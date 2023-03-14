@@ -1,5 +1,30 @@
 version 1.0
 
+import "https://raw.githubusercontent.com/uw-maccosslab/wdl_pipelines/master/wdl/common/panoramaweb.wdl" as panorama
+
+workflow get_file {
+    input {
+        String path
+        String file_mode
+        String? panorama_api_key
+    }
+
+    if (file_mode == "panorama"){
+        call panorama.download_file as download_panorama_file {
+            input: file_url = path,
+                   api_key = panorama_api_key
+        }
+    }
+    if (file_mode == "local") {
+        File local_file = path
+    }
+
+    output {
+        File file = select_first([download_panorama_file.downloaded_file,
+                                  local_file])
+    }
+}
+
 task list_local_files {
     input {
         File path

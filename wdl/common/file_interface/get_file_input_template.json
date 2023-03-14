@@ -1,0 +1,6 @@
+{
+  "get_file.path": "String",
+  "get_file.panorama_api_key": "String? (optional)",
+  "get_file.file_mode": "String"
+}
+

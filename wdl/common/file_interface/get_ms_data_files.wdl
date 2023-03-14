@@ -1,4 +1,3 @@
-
 version 1.0
 
 import "https://raw.githubusercontent.com/uw-maccosslab/wdl_pipelines/master/wdl/common/pdc.wdl" as pdc

@@ -1,0 +1,5 @@
+{
+  "get_file.path": "../../data/test_EncyclopeDIA_pipeline/uniprot_human_jan2021_yeastENO1_subset.fasta",
+  "get_file.file_mode": "local"
+}
+

@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ProteomeXchangeDataset id="PXD014815" formatVersion="1.4.0" xsi:noNamespaceSchemaLocation="proteomeXchange-1.4.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <CvList>
+    <Cv id="MS" fullName="PSI-MS" uri="https://raw.githubusercontent.com/HUPO-PSI/psi-ms-Cv/master/psi-ms.obo"/>
+    <Cv id="MOD" fullName="PSI-MOD" uri="https://raw.githubusercontent.com/HUPO-PSI/psi-mod-CV/master/PSI-MOD.obo"/>
+    <Cv id="UNIMOD" fullName="UNIMOD" uri="http://www.unimod.org/obo/unimod.obo"/>
+  </CvList>
+  <ChangeLog>
+    <ChangeLogEntry>Added publication</ChangeLogEntry>
+  </ChangeLog>
+  <DatasetSummary announceDate="2022-03-29" hostingRepository="PanoramaPublic" title="Matrix-matched calibration curves">
+    <Description>Mass spectrometry is a powerful tool for quantifying protein abundance in complex samples. Advances in sample preparation and the development of data independent acquisition (DIA) mass spectrometry approaches have increased the number of peptides and proteins measured per sample. However, methods to assess quantitative figures of merit (e.g. lower limit of quantification, LLOQ) are not easily extended to multiplex assays with hundreds or thousands of analytes. Here we present a series of experiments demonstrating how to assess whether a peptide measurement is quantitative by mass spectrometry. In a study of the yeast proteome, only 52% of detected proteins (41% of detected peptides) have a peptide that is above the LLOQ in the reference material. A similar trend was observed in human cerebrospinal fluid, suggesting that this observation is not sample-specific. Our results demonstrate that increasing the number of detected peptides and proteins in an unbiased proteomics experiment does not necessarily result in increased numbers of peptides or proteins that can be measured quantitatively. Furthermore, our method provides an approach to determining useful figures of merit for hundreds to thousands of proteins in the same experiment.</Description>
+    <ReviewLevel>
+      <cvParam cvRef="MS" accession="MS:1002854" name="Peer-reviewed dataset"/>
+    </ReviewLevel>
+    <RepositorySupport>
+      <cvParam cvRef="MS" accession="MS:1002856" name="Supported dataset by repository"/>
+    </RepositorySupport>
+  </DatasetSummary>
+  <DatasetIdentifierList>
+    <DatasetIdentifier>
+      <cvParam cvRef="MS" accession="MS:1001919" name="ProteomeXchange accession number" value="PXD014815"/>
+      <cvParam cvRef="MS" accession="MS:1001921" name="ProteomeXchange accession number version number" value="2"/>
+    </DatasetIdentifier>
+    <DatasetIdentifier>
+      <cvParam cvRef="MS" accession="MS:1002872" name="Panorama Public dataset identifier" value="https://panoramaweb.org/matrix-matched_calcurves.url"/>
+    </DatasetIdentifier>
+  </DatasetIdentifierList>
+  <DatasetOriginList>
+    <DatasetOrigin>
+      <cvParam cvRef="MS" accession="MS:1002868" name="Original data"/>
+    </DatasetOrigin>
+  </DatasetOriginList>
+  <SpeciesList>
+    <Species>
+      <cvParam cvRef="MS" accession="MS:1001469" name="taxonomy: scientific name" value="Homo sapiens"/>
+      <cvParam cvRef="MS" accession="MS:1001467" name="taxonomy: NCBI TaxID" value="9606"/>
+    </Species>
+    <Species>
+      <cvParam cvRef="MS" accession="MS:1001469" name="taxonomy: scientific name" value="Saccharomyces cerevisiae"/>
+      <cvParam cvRef="MS" accession="MS:1001467" name="taxonomy: NCBI TaxID" value="4932"/>
+    </Species>
+  </SpeciesList>
+  <InstrumentList>
+    <Instrument id="instrument_1">
+      <cvParam cvRef="MS" accession="MS:1002523" name="Q Exactive HF"/>
+    </Instrument>
+    <Instrument id="instrument_2">
+      <cvParam cvRef="MS" accession="MS:1002732" name="Orbitrap Fusion Lumos"/>
+    </Instrument>
+    <Instrument id="instrument_3">
+      <cvParam cvRef="MS" accession="MS:1002418" name="TSQ Quantiva"/>
+    </Instrument>
+  </InstrumentList>
+  <ModificationList>
+    <cvParam cvRef="UNIMOD" accession="UNIMOD:4" name="Carbamidomethyl"/>
+    <cvParam cvRef="UNIMOD" accession="UNIMOD:259" name="Label:13C(6)15N(2)"/>
+    <cvParam cvRef="UNIMOD" accession="UNIMOD:267" name="Label:13C(6)15N(4)"/>
+  </ModificationList>
+  <ContactList>
+    <Contact id="lab_head">
+      <cvParam cvRef="MS" accession="MS:1002332" name="lab head"/>
+      <cvParam cvRef="MS" accession="MS:1000586" name="contact name" value="Michael MacCoss"/>
+      <cvParam cvRef="MS" accession="MS:1000589" name="contact email" value="maccoss@uw.edu"/>
+      <cvParam cvRef="MS" accession="MS:1000590" name="contact affiliation" value="University of Washington"/>
+    </Contact>
+    <Contact id="dataset_submitter">
+      <cvParam cvRef="MS" accession="MS:1002037" name="dataset submitter"/>
+      <cvParam cvRef="MS" accession="MS:1000586" name="contact name" value="Lindsay Pino"/>
+      <cvParam cvRef="MS" accession="MS:1000589" name="contact email" value="lindsay.pino@gmail.com"/>
+      <cvParam cvRef="MS" accession="MS:1000590" name="contact affiliation" value="University of Washington"/>
+    </Contact>
+  </ContactList>
+  <PublicationList>
+    <Publication id="PMID32037841">
+      <cvParam cvRef="MS" accession="MS:1000879" name="PubMed identifier" value="32037841"/>
+      <cvParam cvRef="MS" accession="MS:1002866" name="Reference" value="Pino LK, Searle BC, Yang HY, Hoofnagle AN, Noble WS, MacCoss MJ. Matrix-Matched Calibration Curves for Assessing Analytical Figures of Merit in Quantitative Proteomics. J Proteome Res. 2020 Mar 6;19(3):1147-1153. doi: 10.1021/acs.jproteome.9b00666. Epub 2020 Feb 24. PMID: 32037841; PMCID: PMC7175947."/>
+    </Publication>
+  </PublicationList>
+  <KeywordList>
+    <cvParam cvRef="MS" accession="MS:1001925" name="submitter keyword" value="loq"/>
+    <cvParam cvRef="MS" accession="MS:1001925" name="submitter keyword" value="calibration curve"/>
+    <cvParam cvRef="MS" accession="MS:1001925" name="submitter keyword" value="matrix matched"/>
+  </KeywordList>
+  <FullDatasetLinkList>
+    <FullDatasetLink>
+      <cvParam cvRef="MS" accession="MS:1002873" name="Panorama Public dataset URI" value="https://panoramaweb.org/matrix-matched_calcurves.url"/>
+    </FullDatasetLink>
+  </FullDatasetLinkList>
+</ProteomeXchangeDataset>

@@ -10,6 +10,7 @@ test/data/common_mzML/*.mzML
 test/data/common_mzML/common_mzML.tar.gz
 test/wdl/pipelines/*/workflow.wdl
 test/wdl/pipelines/*/input_template.json
+test/wdl/*/panorama_api_key.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
