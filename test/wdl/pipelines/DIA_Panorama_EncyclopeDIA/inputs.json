@@ -1,0 +1,15 @@
+{
+  "DIA_Panorama_EncyclopeDIA.file_mode": "local",
+  "DIA_Panorama_EncyclopeDIA.skyline_share_zip_type": "complete",
+  "DIA_Panorama_EncyclopeDIA.encyclopedia_library_name": "lib",
+  "DIA_Panorama_EncyclopeDIA.skyline_output_name": "quant",
+  "DIA_Panorama_EncyclopeDIA.input_wide_files_folder_uri": "../../../data/common_mzML/",
+  "DIA_Panorama_EncyclopeDIA.input_narrow_files_folder_uri": "../../../data/common_mzML/",
+  "DIA_Panorama_EncyclopeDIA.fasta_file_uri": "../../../data/test_EncyclopeDIA_pipeline/uniprot_human_jan2021_yeastENO1_subset.fasta",
+  "DIA_Panorama_EncyclopeDIA.input_file_ext": "mzML",
+  "DIA_Panorama_EncyclopeDIA.skyline_template_zip_uri": "../../../data/test_skyline_tasks/inputs/template.sky.zip",
+  "DIA_Panorama_EncyclopeDIA.library_uri": "../../../data/test_EncyclopeDIA_pipeline/uniprot_human_jan2021_yeastENO1_subset.dlib",
+  "DIA_Panorama_EncyclopeDIA.input_wide_files_regex": "HeLa_100pct_A",
+  "DIA_Panorama_EncyclopeDIA.input_narrow_files_regex": "HeLa_CLib"
+}
+

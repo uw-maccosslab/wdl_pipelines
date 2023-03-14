@@ -1,0 +1,15 @@
+{
+  "DIA_Panorama_EncyclopeDIA.skyline_share_zip_type": "complete",
+  "DIA_Panorama_EncyclopeDIA.encyclopedia_library_name": "lib",
+  "DIA_Panorama_EncyclopeDIA.skyline_output_name": "quant",
+  "DIA_Panorama_EncyclopeDIA.input_wide_files_folder_uri": "File",
+  "DIA_Panorama_EncyclopeDIA.input_narrow_files_folder_uri": "File",
+  "DIA_Panorama_EncyclopeDIA.fasta_file_uri": "File",
+  "DIA_Panorama_EncyclopeDIA.input_file_ext": "raw",
+  "DIA_Panorama_EncyclopeDIA.encyclopedia_version": "1.12.31",
+  "DIA_Panorama_EncyclopeDIA.skyline_template_zip_uri": "File",
+  "DIA_Panorama_EncyclopeDIA.library_uri": "File",
+  "DIA_Panorama_EncyclopeDIA.input_wide_files_regex": "String (optional, default = \"\")",
+  "DIA_Panorama_EncyclopeDIA.input_narrow_files_regex": "String (optional, default = \"\")"
+}
+
