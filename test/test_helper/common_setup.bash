@@ -47,13 +47,13 @@ _copy_pipelines () {
             cp -v "$f" "${TEST_WDL_DIR}/pipelines/${d}"
     done > "$DIR"/logs/cp_pipelines.log
 
-    echo "Processing import urls..." > "$DIR"/logs/process_import_urls.log
+    echo "Processing import urls..." > "$DIR"/logs/process_pipeline_import_urls.log
     for f in $(find "${WDL_DIR}/${WDL_PIPELINES_DIRNAME}" -type f|grep '\.wdl$') ; do
-        echo >> "$DIR"/logs/process_import_urls.log
+        echo >> "$DIR"/logs/process_pipeline_import_urls.log
         f_b=$(basename "$f") && \
         d=$(basename $(dirname "$f")) && \
         "$SCRIPTS_DIR"/venv/bin/process_import_urls \
-            '--logFile' "$DIR/logs/process_import_urls.log" \
+            '--logFile' "$DIR/logs/process_pipeline_import_urls.log" \
             'https://raw.githubusercontent.com/uw-maccosslab/wdl_pipelines/master/wdl/' \
             "$f" > "${TEST_WDL_DIR}/pipelines/${d}/${f_b}"
     done

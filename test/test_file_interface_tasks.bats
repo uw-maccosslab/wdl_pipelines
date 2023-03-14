@@ -26,7 +26,7 @@ setup_file () {
     # check if we can run the workflow
     cd $TEST_WDL_DIR
     run womtool validate -i "$DIR"/cromwell/inputs/local_"$TEST_NAME".json \
-        "$WDL_DIR"/common/file_interface/file_interface.wdl
+        "$TEST_WDL_DIR"/common/file_interface/get_ms_data_files.wdl
     assert_success
 
     # clean up cromwell dir
@@ -39,7 +39,7 @@ setup_file () {
     cd "$DIR"/cromwell
     run cromwell run -o options/common.json --imports "$TEST_WDL_DIR"/common.zip \
         -m metadata/local_"$TEST_NAME".json --inputs "$DIR"/cromwell/inputs/local_"$TEST_NAME".json \
-        "$WDL_DIR"/common/file_interface/file_interface.wdl
+        "$TEST_WDL_DIR"/common/file_interface/get_ms_data_files.wdl
 
     echo -e "$output" > "$DIR"/cromwell/cromwell-workflow-logs/"$TEST_NAME".log
     assert_success
