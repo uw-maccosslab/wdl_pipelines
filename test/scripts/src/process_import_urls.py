@@ -12,7 +12,7 @@ def escape_re(s):
 
 
 def replace_import_paths(lines, fname, repo_root_url, log_file=None):
-    import_line_re = re.compile(r'import\s+"(({})/?([a-zA-Z\-\.\/]+))" as ([\w]+)'.format(escape_re(repo_root_url)))
+    import_line_re = re.compile(r'import\s+"(({})/?([a-zA-Z\-\.\/_]+))" as ([\w]+)'.format(escape_re(repo_root_url)))
     
     file_abs_path = os.path.abspath(fname)
     if log_file and fname:
