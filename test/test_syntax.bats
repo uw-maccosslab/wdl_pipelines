@@ -53,9 +53,17 @@ setup () {
 }
 
 # bats test_tags=file_interface
-@test "local test_file_interface_tasks workflow has valid syntax" {
+@test "test_file_interface_tasks workflow has valid syntax" {
     cd "$TEST_WDL_DIR"
-    run womtool validate -i "$TEST_WDL_DIR"/test_file_interface_tasks/local_inputs.json \
+    run womtool validate -i "$TEST_WDL_DIR"/common/file_interface/get_file_input_template.json \
+        "$TEST_WDL_DIR"/common/file_interface/file_interface.wdl
+    assert_success
+}
+
+# bats test_tags=file_interface
+@test "get_ms_data_files workflow has valid syntax" {
+    cd "$TEST_WDL_DIR"
+    run womtool validate -i "$TEST_WDL_DIR"/common/file_interface/get_ms_data_files_input_template.json \
         "$TEST_WDL_DIR"/common/file_interface/get_ms_data_files.wdl
     assert_success
 }

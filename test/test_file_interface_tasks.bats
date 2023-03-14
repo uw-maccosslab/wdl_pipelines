@@ -51,7 +51,7 @@ setup_file () {
     # generate input files from template
     run "$SCRIPTS_DIR"/venv/bin/add_api_key \
         -o "$DIR"/cromwell/inputs/panorama_"$TEST_NAME".json \
-        "$TEST_WDL_DIR"/"$TEST_NAME"/panorama_api_key.json \
+        "$TEST_WDL_DIR"/panorama_api_key.json \
         "$TEST_WDL_DIR"/"$TEST_NAME"/panorama_file_inputs.json
     assert_success
 
