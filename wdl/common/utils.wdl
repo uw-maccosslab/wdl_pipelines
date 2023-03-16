@@ -4,10 +4,12 @@ version 1.0
 task arrays_overlap {
     input {
         Array[Array[String]] arrays
+        Boolean use_basename = false
+        Boolean continue_on_return_code = false
     }
 
-    command <<<
-        wdl_array_tools arrays_overlap -i ~{write_json(arrays)}
+    command {
+        wdl_array_tools arrays_overlap ~{true="--use_basename" false="" use_basename} -i ~{write_json(arrays)}
 
         if [[ $? -eq 1 ]] ; then
             echo "There is overlap!"
@@ -16,14 +18,20 @@ task arrays_overlap {
             echo "There is no overalp!"
             echo 'false' > has_overlap.txt
         fi
-    >>>
+    }
 
     output {
         Boolean any_overlap = read_boolean("has_overlap.txt")
     }
 
     runtime {
-        docker: "mauraisa/wdl_array_tools:latest"
+        docker: "mauraisa/wdl_array_tools:0.9"
+        continueOnReturnCode: continue_on_return_code
+    }
+
+    parameter_meta {
+        arrays: "Arrays to check for overlap"
+        use_basename: "Use the file basename of the file paths in the arrays."
     }
 
     meta {
