@@ -15,7 +15,7 @@ setup_file () {
 
 # bats file_tags=proteowizard
 # bats test_tags=workflow, panoramaweb
-@test "Local EncyclopeDIA pipeline runs sucessfully" {
+@test "Panorama EncyclopeDIA pipeline runs sucessfully" {
 
     # generate input files from template
     run "$SCRIPTS_DIR"/venv/bin/add_api_key \
@@ -57,4 +57,37 @@ setup_file () {
 #     echo -e "${BATS_TEST_NAME}\n${BATS_RUN_COMMAND}\n${output}\n" >> $COMPARISON_LOG_NAME
 #     [ "$status" -eq 0 ]
 # }
+
+# bats file_tags=proteowizard
+# bats test_tags=workflow, local
+@test "Local EncyclopeDIA pipeline runs sucessfully" {
+
+    # generate input files from template
+    run "$SCRIPTS_DIR"/venv/bin/generate_cromwell_inputs \
+        --ofname "$DIR"/cromwell/inputs/local_"$TEST_NAME".json \
+        "$TEST_WDL_DIR"/pipelines/DIA_Panorama_EncyclopeDIA/test_input_template.json \
+        "$TEST_WDL_DIR"/pipelines/DIA_Panorama_EncyclopeDIA/local_inputs.json
+    assert_success
+
+    # check if we can run the workflow
+    cd $TEST_WDL_DIR
+    run womtool validate -i "$DIR"/cromwell/inputs/local_"$TEST_NAME".json \
+        "$TEST_WDL_DIR"/pipelines/DIA_Panorama_EncyclopeDIA/workflow.wdl
+    assert_success
+
+    # # clean up cromwell dir
+    previous_workflow_root=$(get_workflow_root "$DIR"/cromwell/metadata/local_"$TEST_NAME".json)
+    if [[ -d "$previous_workflow_root" ]] ; then
+        rm -rf "$previous_workflow_root"
+    fi
+
+    # # run workflow
+    cd "$DIR"/cromwell
+    run cromwell run -o options/common.json --imports "$TEST_WDL_DIR"/common.zip \
+        -m metadata/local_"$TEST_NAME".json --inputs "$DIR"/cromwell/inputs/local_"$TEST_NAME".json \
+        "$TEST_WDL_DIR"/pipelines/DIA_Panorama_EncyclopeDIA/workflow.wdl
+
+    echo -e "$output" > "$DIR"/cromwell/cromwell-workflow-logs/"$TEST_NAME".log
+    assert_success
+}
 
