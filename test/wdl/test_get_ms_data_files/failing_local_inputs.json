@@ -1,0 +1,7 @@
+{
+  "get_ms_data_files.file_mode": "local",
+  "get_ms_data_files.input_files_ext": "mzML",
+  "get_ms_data_files.input_wide_files_folder_uri": "../../data/common_mzML",
+  "get_ms_data_files.input_narrow_files_folder_uri": "../../data/common_mzML"
+}
+

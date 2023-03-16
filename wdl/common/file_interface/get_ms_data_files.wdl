@@ -43,7 +43,9 @@ workflow get_ms_data_files {
                    file_ext = input_files_ext,
                    file_regex = input_wide_files_regex
         }
-        scatter (file_webdav_url in select_all([list_panorama_wide_files.url_list,])) {
+
+        Array[String] wide_file_urls = read_lines(select_first([list_panorama_wide_files.url_list]))
+        scatter (file_webdav_url in wide_file_urls) {
             call panorama.download_file as download_panorama_wide_files {
                 input: file_url = file_webdav_url,
                        api_key = panorama_api_key
@@ -57,7 +59,8 @@ workflow get_ms_data_files {
                        file_regex = input_narrow_files_regex
             }
             
-            scatter (file_webdav_url in select_all([list_panorama_narrow_files.url_list,])) {
+            Array[String] narrow_file_urls = read_lines(select_first([list_panorama_narrow_files.url_list]))
+            scatter (file_webdav_url in narrow_file_urls) {
                 call panorama.download_file as download_panorama_narrow_files {
                     input: file_url = file_webdav_url,
                            api_key = panorama_api_key
@@ -68,6 +71,17 @@ workflow get_ms_data_files {
     
     # list and download pdc files
     # download pdc study metadata
+
+    # check whether any wide and narrow files overlap
+    if (defined(input_narrow_files_folder_uri)){
+        call utils.arrays_overlap as wide_and_narrow_files_are_the_same {
+            input: arrays = [select_first([list_local_wide_files.files,
+                                          download_panorama_wide_files.downloaded_file]),
+                             select_first([list_local_narrow_files.files,
+                                           download_panorama_narrow_files.downloaded_file])],
+                   use_basename = true
+        }
+    }
 
     # run msconvert on the files that were downloaded
     if(input_files_ext == "raw") {
@@ -108,8 +122,12 @@ workflow get_ms_data_files {
     }
 
     output {
-        Array[File]? mzml_narrow_files = select_first([msconvert_narrow.converted_file, list_local_narrow_files.files])
-        Array[File] mzml_wide_files = select_first([msconvert_wide.converted_file, list_local_wide_files.files,])
+        Array[File]? mzml_narrow_files = select_first([msconvert_narrow.converted_file,
+                                                       list_local_narrow_files.files,
+                                                       download_panorama_narrow_files.downloaded_file])
+        Array[File] mzml_wide_files = select_first([msconvert_wide.converted_file,
+                                                    list_local_wide_files.files,
+                                                    download_panorama_wide_files.downloaded_file])
         # File? metadata_csv
     }
 }

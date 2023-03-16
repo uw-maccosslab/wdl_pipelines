@@ -1,0 +1,9 @@
+{
+  "get_ms_data_files.file_mode": "panorama",
+  "get_ms_data_files.input_files_ext": "mzML",
+  "get_ms_data_files.input_wide_files_folder_uri": "https://panoramaweb.org/_webdav/MacCoss/Aaron/cromwell_tests/pipeline_unit_test_data/%40files/mzML/",
+  "get_ms_data_files.input_wide_files_regex": "100pct_A[0-9]{2}_[0-9]{2}",
+  "get_ms_data_files.input_narrow_files_folder_uri": "https://panoramaweb.org/_webdav/MacCoss/Aaron/cromwell_tests/pipeline_unit_test_data/%40files/mzML/",
+  "get_ms_data_files.input_narrow_files_regex": "HeLa_CLib_100pct"
+}
+
