@@ -161,3 +161,62 @@ setup_file () {
     assert_failure
 }
 
+# bats file_tags=file_interface
+# bats test_tags=workflow, local
+@test "Local no narrow get_ms_data_files workflow runs sucessfully" {
+
+    # generate input files from template
+    run "$SCRIPTS_DIR"/venv/bin/generate_cromwell_inputs \
+        -o "$DIR"/cromwell/inputs/local_no_narrow_"$TEST_NAME".json \
+        "$TEST_WDL_DIR"/"$TEST_NAME"/local_no_narrow_inputs_template.json \
+        "$TEST_WDL_DIR"/"$TEST_NAME"/local_no_narrow_inputs.json
+    assert_success
+
+    # check if we can run the workflow
+    cd $TEST_WDL_DIR
+    run womtool validate -i "$DIR"/cromwell/inputs/local_no_narrow_"$TEST_NAME".json \
+        "$TEST_WDL_DIR"/common/file_interface/get_ms_data_files.wdl
+    assert_success
+
+    # clean up cromwell dir
+    previous_workflow_root=$(get_workflow_root "$DIR"/cromwell/metadata/local_no_narrow_"$TEST_NAME".json)
+    if [[ -d "$previous_workflow_root" ]] ; then
+        rm -rf "$previous_workflow_root"
+    fi
+
+    # run workflow
+    cd "$DIR"/cromwell
+    run cromwell run -o options/common.json --imports "$TEST_WDL_DIR"/common.zip \
+        -m metadata/local_no_narrow_"$TEST_NAME".json --inputs "$DIR"/cromwell/inputs/local_no_narrow_"$TEST_NAME".json \
+        "$TEST_WDL_DIR"/common/file_interface/get_ms_data_files.wdl
+
+    echo -e "$output" > "$DIR"/cromwell/cromwell-workflow-logs/local_no_narrow_"$TEST_NAME".log
+    assert_success
+}
+
+# bats file_tags=file_interface
+# bats test_tags=workflow, pdc
+@test "PDC get_ms_data_files workflow runs sucessfully" {
+
+    # check if we can run the workflow
+    cd $TEST_WDL_DIR
+    run womtool validate -i "${TEST_WDL_DIR}/test_get_ms_data_files/pdc_inputs.json" \
+        "$TEST_WDL_DIR"/common/file_interface/get_ms_data_files.wdl
+    assert_success
+
+    # clean up cromwell dir
+    previous_workflow_root=$(get_workflow_root "$DIR"/cromwell/metadata/pdc_"$TEST_NAME".json)
+    if [[ -d "$previous_workflow_root" ]] ; then
+        rm -rf "$previous_workflow_root"
+    fi
+
+    # run workflow
+    cd "$DIR"/cromwell
+    run cromwell run -o options/common.json --imports "$TEST_WDL_DIR"/common.zip \
+        -m metadata/pdc_"$TEST_NAME".json --inputs "${TEST_WDL_DIR}/test_get_ms_data_files/pdc_inputs.json" \
+        "$TEST_WDL_DIR"/common/file_interface/get_ms_data_files.wdl
+
+    echo -e "$output" > "$DIR"/cromwell/cromwell-workflow-logs/pdc_"$TEST_NAME".log
+    assert_success
+}
+

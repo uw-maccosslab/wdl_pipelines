@@ -1,0 +1,7 @@
+{
+  "get_ms_data_files.file_mode": "pdc",
+  "get_ms_data_files.input_files_ext": "raw",
+  "get_ms_data_files.pdc_study_id": "6b9fcc3b-d4f6-4969-86f4-d25fb481f927",
+  "get_ms_data_files.files_to_analyze": ["CPTAC_CCRCC_W_JHU_20200710_LUMOS_CPT007730_ITH_02"]
+}
+
