@@ -29,16 +29,29 @@ workflow test_skyline_tasks {
                    skyline_share_zip_type = "complete",
                    skyline_output_name = "out"
         }
-        call pwiz.skyline_import_results {
+        # call pwiz.skyline_import_results {
+        #     input: skyline_zip = skyline_add_library.skyline_output,
+        #            mzml_files = list_wide_mzml_files.files,
+        #            skyline_share_zip_type = "complete"
+        # }
+
+        scatter(mzml_file in list_wide_mzml_files.files) {
+            call pwiz.skyline_import_file as import_mzml_file {
+                input: skyline_zip = skyline_add_library.skyline_output,
+                       mzml_file = mzml_file
+            }
+        }
+        call pwiz.skyline_merge_results {
             input: skyline_zip = skyline_add_library.skyline_output,
                    mzml_files = list_wide_mzml_files.files,
+                   skyd_files = import_mzml_file.skyd_file,
                    skyline_share_zip_type = "complete"
         }
+
         if(defined(annotations_csv)) {
             call pwiz.skyline_annotate_document {
-                input: skyline_zip = skyline_import_results.skyline_output,
+                input: skyline_zip = skyline_merge_results.skyline_output,
                        annotation_csv = select_first([annotations_csv,])
-                       
             }
         }
 
@@ -47,7 +60,7 @@ workflow test_skyline_tasks {
     # export reports
     File report_skyline_doc = select_first([skyline_doc,
                                             skyline_annotate_document.skyline_output,
-                                            skyline_import_results.skyline_output])
+                                            skyline_merge_results.skyline_output])
     call pwiz.skyline_export_report as export_precursor_report {
         input: skyline_zip = report_skyline_doc,
                report_template = precursor_quality_report_template

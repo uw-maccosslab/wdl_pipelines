@@ -26,16 +26,25 @@ workflow skyline_import_search {
         }
     }
 
-    call skyline_import_results {
+    scatter(mzml_file in mzml_files) {
+        call skyline_import_file {
+            input: skyline_zip = select_first([skyline_turn_off_library_explicit_peak_bounds.skyline_output,
+                                        skyline_add_library.skyline_output]),
+                   mzml_file = mzml_file
+        }
+    }
+
+    call skyline_merge_results {
         input: skyline_zip = select_first([skyline_turn_off_library_explicit_peak_bounds.skyline_output,
-                                           skyline_add_library.skyline_output]),
-               mzml_files = mzml_files,
+                                    skyline_add_library.skyline_output]),
+               mzml_files=mzml_files,
+               skyd_files=skyline_import_file.skyd_file,
                skyline_output_name = skyline_output_name,
                skyline_share_zip_type = skyline_share_zip_type
     }
     
     output {
-        File skyline_output = skyline_import_results.skyline_output
+        File skyline_output = skyline_merge_results.skyline_output
     }
 }
 
@@ -171,108 +180,71 @@ task skyline_add_library {
 }
 
 
-task skyline_import_results {
+task skyline_import_file {
+    input{
+        File skyline_zip
+        File mzml_file
+    }
+
+    String skyline_template_basename = basename(skyline_zip, ".sky.zip")
+
+    command <<<
+        unzip "~{skyline_zip}"
+
+        ln -v ~{mzml_file} .
+
+        wine SkylineCmd --in="~{skyline_template_basename}.sky" \
+            --import-no-join \
+            --log-file='~{basename(mzml_file, ".mzML")}.log' \
+            --import-file="~{basename(mzml_file)}"
+    >>>
+
+    runtime {
+        docker: "proteowizard/pwiz-skyline-i-agree-to-the-vendor-licenses:latest"
+        maxRetries: 3
+    }
+
+    output {
+        File skyd_file = basename(mzml_file) + ".skyd"
+    }
+}
+
+
+task skyline_merge_results {
     input {
         File skyline_zip
         Array[File] mzml_files
+        Array[File] skyd_files
         String? skyline_output_name
         String? skyline_share_zip_type = "complete"
         Int files_to_import_at_once = 10
-        Int import_retries = 3
     }
 
-    String? local_skyline_output_name = if defined(skyline_output_name)
+    String local_skyline_output_name = if defined(skyline_output_name)
         then skyline_output_name
         else basename(skyline_zip, ".sky.zip") + "_results"
 
-    command <<<
-        declare -i RETRIES=~{import_retries}
-
+    command <<< 
+        
+        echo "Setting up..."
         unzip "~{skyline_zip}"
+        for f in ~{sep=' ' mzml_files} ; do ln -v "$f" .; done
+        for f in ~{sep=' ' skyd_files} ; do ln -v "$f" .; done
+        echo "Finisned setup!"
 
-        # create array of import commands
-        files=( ~{sep=' ' mzml_files} )
-        echo -e "\nImporting ${#files[@]} files in total."
-        file_count=0
-        not_done=true
-        add_commands=()
-        while $not_done; do
-            add_command=""
-            for ((i=0; i < ~{files_to_import_at_once}; i++)); do
-                if [[ $file_count -ge "${#files[@]}" ]] ; then
-                    not_done=false
-                    break
-                fi
-                add_command="${add_command} --import-file=${files[$file_count]}"
-                (( file_count++ ))
-            done
-            if [[ "$add_command" != "" ]] ; then
-                add_commands+=("$add_command")
-            fi
-        done
-
-        # run skyline import in groups of n files
-        # Importing in groups is necissary because sometimes there are random errors when accessing
-        # files on the network file system inside of wine. By importing in groups we can avoid having
-        # to start over at the begining if one of these intermittent errors occurs.
-        files_imported=0
-        skyline_input="--in=\"$(basename '~{skyline_zip}' '.zip')\" --out=\"~{local_skyline_output_name}.sky\""
-        for c in "${add_commands[@]}" ; do
-
-            # write import command to temporary file
-            # This is necissary because wine is stupid and dosen't expand shell varaibles.
-            echo "wine SkylineCmd $skyline_input \
-                      --log-file=skyline_import_files.log \
-                      $c --save" > import_command.sh
-
-            # update skyline_input variable to use the new file name
-            skyline_input="--in=\"~{local_skyline_output_name}.sky\""
-
-            # print progress
-            files_in_group=$(cat import_command.sh |grep -o '\.mzML\s'|wc -l)
-            (( files_imported += files_in_group ))
-            echo -e "\nImporting ${files_imported} of ${#files[@]} files..."
-            echo "The SkylineCmd import command was..."
-            cat import_command.sh
-
-            # Import file group with retries if there is an error
-            import_sucessful=false
-            for ((i=0; i < RETRIES; i++)); do
-                printf "\nTry number: %s of %s\n" $((i + 1)) $RETRIES
-                bash import_command.sh
-                if [[ $? -eq 0 ]] ; then
-                    echo "Import was sucessful!"
-                    import_sucessful=true
-                    break
-                fi
-                echo "Import failed!"
-            done
-            if ! $import_sucessful ; then
-                exit 1
-            fi
-        done
-
-        # create skyline zip file
-        wine SkylineCmd --in="~{local_skyline_output_name}.sky" --log-file=skyline_share_zip.log \
+        wine SkylineCmd --in='~{basename(skyline_zip, ".sky.zip")}.sky' --log-file=skyline_share_zip.log \
+            --import-file=~{sep=' --import-file=' mzml_files} \
+            --out="~{local_skyline_output_name}.sky" --save \
             --share-zip="~{local_skyline_output_name}.sky.zip" --share-type="~{skyline_share_zip_type}"
     >>>
 
     runtime {
         docker: "proteowizard/pwiz-skyline-i-agree-to-the-vendor-licenses:latest"
+        maxRetries: 3
     }
 
     output {
         File skyline_output = "${local_skyline_output_name}.sky.zip"
-    }
-
-    parameter_meta {
-        skyline_output_name: "The basename of the skyline output file."
-    }
-
-    meta {
-        author: "Aaron Maurais"
-        email: "mauraisa@uw.edu"
-        description: "Add mzML files to a skyline document with an existing target list."
     }
 }
 
