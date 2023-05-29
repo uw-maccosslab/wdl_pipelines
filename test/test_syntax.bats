@@ -23,6 +23,12 @@ setup () {
     assert_success
 }
 
+# bats test_tags=proteowizard
+@test "test_msconvert_bad_file_type workflow has valid syntax" {
+    run womtool validate -i "$TEST_WDL_DIR"/test_msconvert_tasks/failing_inputs.json "$TEST_WDL_DIR"/test_msconvert_tasks/test_msconvert_bad_file_type.wdl
+    assert_success
+}
+
 # bats test_tags=proteowizard, full
 @test "Full test_skyline_tasks workflow has valid syntax" {
     run womtool validate -i "$TEST_WDL_DIR"/test_skyline_tasks/full_inputs.json "$TEST_WDL_DIR"/test_skyline_tasks/test_skyline_tasks.wdl

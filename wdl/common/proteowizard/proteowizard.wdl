@@ -100,7 +100,7 @@ task msconvert {
         elif [ '~{file_type}' == 'thermo' ] ; then
             RAW_FILE='~{raw_file}'
         else
-            echo "${file_type} is an unknown file format! Supported formats are 'thermo' and 'sciex'."
+            echo "'~{file_type}' is an unknown file format! Supported formats are 'thermo' and 'sciex'."
             exit 1
         fi
 
