@@ -74,6 +74,7 @@ task msconvert {
         File? config_file
         Array[String]? msconvert_args
         Int retries = 3
+        String file_type = "thermo"
     }
 
     command <<<
@@ -92,7 +93,18 @@ task msconvert {
             exit 1
         fi
 
-        echo "wine msconvert --singleThreaded $ARGV ~{raw_file}" > msconvert_command.sh
+        # deal with different file types
+        if [ '~{file_type}' == 'sciex' ] ; then
+            unzip '~{raw_file}'
+            RAW_FILE="$(basename ~{raw_file} '.zip')"
+        elif [ '~{file_type}' == 'thermo' ] ; then
+            RAW_FILE='~{raw_file}'
+        else
+            echo "${file_type} is an unknown file format! Supported formats are 'thermo' and 'sciex'."
+            exit 1
+        fi
+
+        echo "wine msconvert --singleThreaded $ARGV ${RAW_FILE}" > msconvert_command.sh
 
         for ((i=0; i < RETRIES ; i++)) ; do
             printf "\nTry number: %s of %s\n" $((i + 1)) $RETRIES

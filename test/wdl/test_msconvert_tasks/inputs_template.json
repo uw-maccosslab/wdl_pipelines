@@ -1,5 +1,7 @@
 {
   "test_msconvert_tasks.non_overlapping_test_mzml": "File",
-  "test_msconvert_tasks.overlapping_window_test_mzml": "File"
+  "test_msconvert_tasks.overlapping_window_test_mzml": "File",
+  "test_msconvert_tasks.test_thermo_raw_file": "File",
+  "test_msconvert_tasks.test_sciex_wiff_zip_file": "File"
 }
 
