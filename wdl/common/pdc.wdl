@@ -32,7 +32,7 @@ task download_study_metadata {
   >>>
 
   runtime {
-    docker: "mauraisa/pdc_client:latest"
+    docker: "mauraisa/pdc_client:0.4"
   }
 
   output {
@@ -60,7 +60,7 @@ task lookup_study_id {
   }
 
   runtime {
-    docker: "mauraisa/pdc_client:latest"
+    docker: "mauraisa/pdc_client:0.3"
   }
 
   output {
@@ -84,7 +84,7 @@ task download_file {
   }
 
   runtime {
-    docker: "mauraisa/pdc_client:latest"
+    docker: "mauraisa/pdc_client:0.3"
   }
 
   output {
